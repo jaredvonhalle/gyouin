@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import './OverviewBets.css';
+import ReactTable from "react-table";
+import "react-table/react-table.css";
 
 class OverviewBets extends Component {
 
@@ -28,38 +30,39 @@ class OverviewBets extends Component {
   }
 
 	render() {
-    var items = this.state.bets.map(
-      it => 
-      <tr>
-        <td onClick={this.challengerClick} key={it.id}>{it.challenger}</td>
-        <td key={it.id}>{it.odds}</td>
-        <td key={it.id}>{it.description}</td>
-        <td key={it.id}>{it.accepter}</td>
-        <td key={it.id}>{it.amount}</td>
-        <td key={it.id}>{it.createDate.substr(0,10)}</td>
-        <td key={it.id}>{it.endDate.substr(0,10)}</td>
-        <td key={it.id}>{it.status}</td>
-      </tr>
-    );
+
+    const columns = [{
+      Header: 'challenger',
+      accessor: 'challenger'
+    },{
+      Header: 'odds',
+      accessor: 'odds'
+    },{
+      Header: 'description',
+      accessor: 'description'
+    },{
+      Header: 'accepter',
+      accessor: 'accepter'
+    },{
+      Header: 'amount',
+      accessor: 'amount'
+    },{
+      Header: 'createDate',
+      accessor: 'createDate'
+    },{
+      Header: 'endDate',
+      accessor: 'endDate'
+    },{
+      Header: 'status',
+      accessor: 'status'
+    }]
     return (
       <div className="overview-bets container-fluid">
-        <table class="overview-bets-table table table-striped">
-          <thead>
-            <tr>
-              <th>Challenger</th>
-              <th>Odds</th>
-              <th>Description</th>
-              <th>Accepter</th>
-              <th>Base Amount</th>
-              <th>Create Date</th>
-              <th>End Date</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {items}
-          </tbody>
-        </table>
+        <ReactTable
+          data={this.state.bets}
+          columns={columns}
+          defaultPageSize = {10}
+        />
       </div>
     );
   }
