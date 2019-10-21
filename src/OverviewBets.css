@@ -2,6 +2,7 @@
   margin-top:60px;
 }
 
-.editable {
-  color:red;
+.save-highlight {
+  background-color:green;
+  color:white;
 }

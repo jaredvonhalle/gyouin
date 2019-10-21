@@ -8,8 +8,7 @@ class OverviewBets extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      bets:[],
-      changedInd:[]
+      bets:[]
     };
     this.myRef = React.createRef();
     this.renderEditable = this.renderEditable.bind(this);
@@ -57,11 +56,6 @@ class OverviewBets extends Component {
     });
   }
 
-  isChanged(cellInfo) {
-    var ind = this.state.changedInd.includes(456);
-    return ind;
-  }
-
   renderEditable(cellInfo) {
     return (
       <div
@@ -70,8 +64,9 @@ class OverviewBets extends Component {
         onBlur={e => {
           const data = [...this.state.bets];
           data[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
+          //doing
+          data[cellInfo.index]["saveInd"] = true;
           this.setState({ data });
-          this.setState({changedInd:[456]})
         }}
         dangerouslySetInnerHTML={{
           __html: this.state.bets[cellInfo.index][cellInfo.column.id]
@@ -116,7 +111,7 @@ class OverviewBets extends Component {
       Header: 'Save',
       Cell: props => {
         return(
-          <button className={(this.isChanged(props) ? 'editable' : 'not')} onClick={() => this.saveRow(props)}>
+          <button disabled={(this.state.bets[props.index].saveInd ? '' : 'true')} className={(this.state.bets[props.index].saveInd ? 'save-highlight' : '')} onClick={() => this.saveRow(props)}>
             Save
           </button>
         )
