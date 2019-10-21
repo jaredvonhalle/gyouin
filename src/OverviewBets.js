@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
 import './OverviewBets.css';
-import $ from 'jquery';
-import 'datatables.net';
 
 class OverviewBets extends Component {
 
@@ -25,11 +23,7 @@ class OverviewBets extends Component {
     })
     .then(data => {
       this.setState({ bets:data })
-    }).then(next => {
-      $(".overview-bets-table").DataTable()
-    });
-    //var ref = this.myRef.current;
-    //$(ref).DataTable();
+    })
     
   }
 
@@ -49,7 +43,7 @@ class OverviewBets extends Component {
     );
     return (
       <div className="overview-bets container-fluid">
-        <table ref={this.myRef} class="overview-bets-table table table-striped">
+        <table class="overview-bets-table table table-striped">
           <thead>
             <tr>
               <th>Challenger</th>
