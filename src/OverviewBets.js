@@ -63,9 +63,11 @@ class OverviewBets extends Component {
         suppressContentEditableWarning
         onBlur={e => {
           const data = [...this.state.bets];
+          var changedInd = (data[cellInfo.index][cellInfo.column.id] == e.target.innerHTML) ? false : true
           data[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
-          //doing
-          data[cellInfo.index]["saveInd"] = true;
+          if (changedInd) {
+            data[cellInfo.index]["saveInd"] = true;
+          }
           this.setState({ data });
         }}
         dangerouslySetInnerHTML={{
@@ -111,7 +113,9 @@ class OverviewBets extends Component {
       Header: 'Save',
       Cell: props => {
         return(
-          <button disabled={(this.state.bets[props.index].saveInd ? '' : 'true')} className={(this.state.bets[props.index].saveInd ? 'save-highlight' : '')} onClick={() => this.saveRow(props)}>
+          <button disabled={(this.state.bets[props.index].saveInd ? '' : 'true')} 
+                  className={(this.state.bets[props.index].saveInd ? 'save-highlight' : '')} 
+                  onClick={() => this.saveRow(props)}>
             Save
           </button>
         )
