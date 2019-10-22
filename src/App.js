@@ -1,6 +1,7 @@
 import React from 'react';
 import './App.css';
 import OverviewBets from './OverviewBets';
+import NewBet from './NewBet';
 import insurance from './insurance.svg'
 
 function App() {
@@ -12,6 +13,7 @@ function App() {
         </p>
         <img className="App-insurance" src={insurance}></img>
       </header>
+      <NewBet/>
       <OverviewBets/>
     </div>
   );
