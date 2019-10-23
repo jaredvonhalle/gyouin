@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import './OverviewBets.css';
 import ReactTable from "react-table";
 import "react-table/react-table.css";
-import { putData, getPutDataRequest, deleteData } from './ApiRequests';
+import {getPutDataRequest, deleteData } from './ApiRequests';
 
-class OverviewBets extends Component {
+class BetsChart extends Component {
 
   constructor(props) {
     super(props);

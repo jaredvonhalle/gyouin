@@ -1,21 +1,60 @@
-import React, { Component } from 'react';
+import React, { Component, ReactDOM } from 'react';
 import { Form, Button, Row, Col, Dropdown } from 'react-bootstrap';
 import './NewBet.css';
+import { postData } from './ApiRequests';
 
 class NewBet extends Component {
+
+  constructor(props) {
+    super(props);
+    this.handleSubmit = this.handleSubmit.bind(this);
+    this.formRef = React.createRef();
+    this.toggleRef = React.createRef();
+  }
+
+  buildNewBet(accepter, challenger, odds, amount, description, endDate) {
+    let newBetObj = {};
+    newBetObj.id = (Math.random() * 100000000000000000000).toString() + Date.now().toString();
+    newBetObj.accepter = accepter;
+    newBetObj.challenger = challenger;
+    newBetObj.odds = odds;
+    newBetObj.amount = parseFloat(amount);
+    newBetObj.description = description;
+    newBetObj.endDate = endDate;
+    newBetObj.status = "Pending";
+    var date = new Date();
+    var stringDate = date.toISOString(); 
+    newBetObj.createDate = stringDate;
+    let jsonData = JSON.stringify(newBetObj);
+    postData(jsonData);
+  }
+
+  handleSubmit = event => {
+    event.preventDefault();
+    this.buildNewBet(
+      event.target.elements.newBetAccepter.value,
+      event.target.elements.newBetChallenger.value,
+      event.target.elements.newBetOdds.value,
+      event.target.elements.newBetAmount.value,
+      event.target.elements.newBetDescription.value,
+      event.target.elements.newBetEndDate.value
+    );
+    var form = this.formRef.current;
+    form.handleClose();
+  };
 
 	render() {
     return (
       <div className="bet-form">
         <Dropdown>
-          <Dropdown.Toggle variant="success" id="dropdown-basic">
+          <Dropdown.Toggle ref={this.toggleRef} variant="success" id="dropdown-basic">
             Add New Bet
           </Dropdown.Toggle>
-            <Dropdown.Menu>
-              <Form>
+            <Dropdown.Menu ref={this.formRef}>
+              <Form onSubmit={this.handleSubmit}>
               <Row>
                 <Col>
-                  <Form.Group controlId="newBetChallebnger">
+                  <Form.Group controlId="newBetChallenger">
                     <Form.Label>Challenger</Form.Label>
                     <Form.Control as="select">
                       <option>Andrew</option>
@@ -65,7 +104,7 @@ class NewBet extends Component {
                   </Form.Group>
                 </Col>
                 <Col>
-                  <Form.Group controlId="newEndDate">
+                  <Form.Group controlId="newBetEndDate">
                     <Form.Label>End Date</Form.Label>
                     <Form.Control type="date"/>
                   </Form.Group>
