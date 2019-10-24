@@ -2,15 +2,13 @@ import React, { Component } from 'react';
 import './OverviewBets.css';
 import ReactTable from "react-table";
 import "react-table/react-table.css";
-import { putData, getPutDataRequest, deleteData } from './ApiRequests';
+import {getPutDataRequest, getDeleteDataRequest } from './ApiRequests';
+import { connect } from 'react-redux';
 
 class OverviewBets extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {
-      bets:[]
-    };
     this.renderEditable = this.renderEditable.bind(this);
     this.renderEditableNumber = this.renderEditableNumber.bind(this);
     this.saveRow = this.saveRow.bind(this);
@@ -27,23 +25,32 @@ class OverviewBets extends Component {
       return response.json();
     })
     .then(data => {
-      this.setState({ bets:data })
+      this.props.dispatch({type:'GET_BETS', bets:data})
     })
     
   }
 
   saveRow(cellInfo) {
-    let data = this.state.bets[cellInfo.index]
-    //putData(data);
+    let data = this.props.bets[cellInfo.index]
     let putRequest = getPutDataRequest(data);
     putRequest().then(response => {
       console.log(response);
+      if (response.ok) {
+        this.props.dispatch({type:'SAVE_BET', bet:data})
+      }
+      
     });
   }
 
   deleteRow(cellInfo) {
-    let data = this.state.bets[cellInfo.index]
-    deleteData(data)
+    let data = this.props.bets[cellInfo.index]
+    let deleteRequest = getDeleteDataRequest(data);
+    deleteRequest().then(response => {
+      console.log(response);
+      if (response.ok) {
+        this.props.dispatch({type:'DELETE_BET', id:data.id})
+      }
+    })
   }
 
   renderEditableNumber(cellInfo) {
@@ -53,16 +60,15 @@ class OverviewBets extends Component {
         contentEditable
         suppressContentEditableWarning
         onBlur={e => {
-          const data = [...this.state.bets];
+          const data = [...this.props.bets];
           var changedInd = (data[cellInfo.index][cellInfo.column.id] == e.target.innerHTML) ? false : true
           data[cellInfo.index][cellInfo.column.id] = parseFloat(e.target.innerHTML);
           if (changedInd) {
-            data[cellInfo.index]["saveInd"] = true;
+            this.props.dispatch({type:'SET_BET_SAVE_IND_TRUE', id:data[cellInfo.index].id})
           }
-          this.setState({ data });
         }}
         dangerouslySetInnerHTML={{
-          __html: this.state.bets[cellInfo.index][cellInfo.column.id]
+          __html: this.props.bets[cellInfo.index][cellInfo.column.id]
         }}
       />
     );
@@ -74,16 +80,15 @@ class OverviewBets extends Component {
         contentEditable
         suppressContentEditableWarning
         onBlur={e => {
-          const data = [...this.state.bets];
+          const data = [...this.props.bets];
           var changedInd = (data[cellInfo.index][cellInfo.column.id] == e.target.innerHTML) ? false : true
           data[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
           if (changedInd) {
-            data[cellInfo.index]["saveInd"] = true;
+            this.props.dispatch({type:'SET_BET_SAVE_IND_TRUE', id:data[cellInfo.index].id})
           }
-          this.setState({ data });
         }}
         dangerouslySetInnerHTML={{
-          __html: this.state.bets[cellInfo.index][cellInfo.column.id]
+          __html: this.props.bets[cellInfo.index][cellInfo.column.id]
         }}
       />
     );
@@ -125,8 +130,8 @@ class OverviewBets extends Component {
       Header: 'Save',
       Cell: props => {
         return(
-          <button disabled={(this.state.bets[props.index].saveInd ? '' : 'true')} 
-                  className={(this.state.bets[props.index].saveInd ? 'save-highlight' : '')} 
+          <button disabled={(this.props.bets[props.index].saveInd ? '' : true)} 
+                  className={(this.props.bets[props.index].saveInd ? 'save-highlight' : '')} 
                   onClick={() => this.saveRow(props)}>
             Save
           </button>
@@ -157,7 +162,7 @@ class OverviewBets extends Component {
       <div className="overview-bets container-fluid">
         <ReactTable
           className="-striped"
-          data={this.state.bets}
+          data={this.props.bets}
           columns={columns}
           defaultPageSize = {10}
           filterable
@@ -172,4 +177,10 @@ class OverviewBets extends Component {
   }
 }
 
-export default OverviewBets;
+function mapStateToProps(state) {
+  return {
+    bets: state.bets
+  };
+}
+
+export default connect(mapStateToProps)(OverviewBets);

@@ -1,7 +1,8 @@
 import React, { Component, ReactDOM } from 'react';
 import { Form, Button, Row, Col, Dropdown } from 'react-bootstrap';
 import './NewBet.css';
-import { postData } from './ApiRequests';
+import { getPostDataRequest } from './ApiRequests';
+import { connect } from 'react-redux';
 
 class NewBet extends Component {
 
@@ -26,7 +27,16 @@ class NewBet extends Component {
     var stringDate = date.toISOString(); 
     newBetObj.createDate = stringDate;
     let jsonData = JSON.stringify(newBetObj);
-    postData(jsonData);
+
+    let postRequest = getPostDataRequest(jsonData);
+    postRequest().then(response => {
+      console.log(response);
+      if (response.ok) {
+        this.props.dispatch({type:'ADD_BET', bet:newBetObj})
+      }
+    })
+
+    
   }
 
   handleSubmit = event => {
@@ -122,4 +132,10 @@ class NewBet extends Component {
   }
 }
 
-export default NewBet;
+function mapStateToProps(state) {
+  return {
+    bets: state.bets
+  };
+}
+
+export default connect(mapStateToProps)(NewBet);
