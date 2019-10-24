@@ -4,6 +4,7 @@ import ReactTable from "react-table";
 import "react-table/react-table.css";
 import {getPutDataRequest, getDeleteDataRequest } from './ApiRequests';
 import { connect } from 'react-redux';
+import CompleteForm from './CompleteForm';
 
 class OverviewBets extends Component {
 
@@ -13,6 +14,7 @@ class OverviewBets extends Component {
     this.renderEditableNumber = this.renderEditableNumber.bind(this);
     this.saveRow = this.saveRow.bind(this);
     this.deleteRow = this.deleteRow.bind(this);
+    this.completeRow = this.completeRow.bind(this);
   }
 
   componentDidMount() {
@@ -30,27 +32,45 @@ class OverviewBets extends Component {
     
   }
 
-  saveRow(cellInfo) {
-    let data = this.props.bets[cellInfo.index]
+  saveBet(data) {
     let putRequest = getPutDataRequest(data);
     putRequest().then(response => {
       console.log(response);
       if (response.ok) {
         this.props.dispatch({type:'SAVE_BET', bet:data})
+        alert("Save Successful");
+      } else {
+        alert("Failed to save. Don't blame Jared");
       }
       
     });
   }
 
-  deleteRow(cellInfo) {
+  saveRow(cellInfo) {
     let data = this.props.bets[cellInfo.index]
-    let deleteRequest = getDeleteDataRequest(data);
-    deleteRequest().then(response => {
-      console.log(response);
-      if (response.ok) {
-        this.props.dispatch({type:'DELETE_BET', id:data.id})
-      }
-    })
+    this.saveBet(data);
+  }
+
+  getBetString(bet) {
+    return `${bet.challenger} challenges ${bet.accepter} with ${bet.odds} odds to: ${bet.description}`
+  }
+
+  deleteRow(cellInfo) {
+    if (window.confirm('Are you sure you wish to delete the following bet...\n\n' + this.getBetString(this.props.bets[cellInfo.index]))) {
+      let data = this.props.bets[cellInfo.index]
+      let deleteRequest = getDeleteDataRequest(data);
+      deleteRequest().then(response => {
+        console.log(response);
+        if (response.ok) {
+          this.props.dispatch({type:'DELETE_BET', id:data.id})
+        }
+      })
+    }
+  }
+
+  completeRow(cellInfo) {
+    let data = this.props.bets[cellInfo.index]
+    this.props.dispatch({type:'SHOW_COMPLETE_FORM', completeBet:data})
   }
 
   renderEditableNumber(cellInfo) {
@@ -118,7 +138,8 @@ class OverviewBets extends Component {
       Cell: this.renderEditableNumber
     },{
       Header: 'Create Date',
-      accessor: 'createDate'
+      accessor: 'createDate',
+      Cell: this.renderEditable
     },{
       Header: 'End Date',
       accessor: 'endDate',
@@ -143,6 +164,20 @@ class OverviewBets extends Component {
       maxWidth:100,
       minWidth:100
     },{
+      Header: 'Complete',
+      Cell: props => {
+        return(
+          <button onClick={() => this.completeRow(props)}>
+            Complete
+          </button>
+        )
+      },
+      filterable: false,
+      sortable: false,
+      width:100,
+      maxWidth:100,
+      minWidth:100
+    },{
       Header: 'Delete',
       Cell: props => {
         return(
@@ -156,10 +191,21 @@ class OverviewBets extends Component {
       width:100,
       maxWidth:100,
       minWidth:100
+    }]
+
+    const showCompleteForm = this.props.showCompleteForm;
+    let completeForm
+
+    if(showCompleteForm) {
+      completeForm = <CompleteForm/>
+    } else {
+      completeForm = <div></div>
     }
-  ]
     return (
       <div className="overview-bets container-fluid">
+        <div className="complete-form-container">
+          {completeForm}
+        </div>
         <ReactTable
           className="-striped"
           data={this.props.bets}
@@ -179,7 +225,9 @@ class OverviewBets extends Component {
 
 function mapStateToProps(state) {
   return {
-    bets: state.bets
+    bets: state.bets,
+    showCompleteForm: state.showCompleteForm,
+    currCompleteBet: state.currCompleteBet
   };
 }
 

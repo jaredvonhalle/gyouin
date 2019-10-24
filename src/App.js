@@ -7,7 +7,9 @@ import { Provider } from 'react-redux';
 import { createStore, bindActionCreators } from 'redux';
 
 const initialState = {
-  bets:[]
+  bets:[],
+  showCompleteForm:false,
+  currCompleteBet:{}
 };
 
 function reducer(state = initialState, action) {
@@ -16,7 +18,22 @@ function reducer(state = initialState, action) {
 
   switch(action.type) {
     case 'GET_BETS':
-      return {bets:action.bets};
+      return {
+        ...state, 
+        bets:action.bets
+      };
+    case 'SHOW_COMPLETE_FORM':
+      return {
+        ...state,
+        showCompleteForm:true,
+        currCompleteBet:action.completeBet
+      }
+    case 'HIDE_COMPLETE_FORM':
+      return {
+        ...state,
+        showCompleteForm:false,
+        currCompleteBet:{}
+      }
     case 'SAVE_BET':
       var successInd = false
       var currBets = [...state.bets]

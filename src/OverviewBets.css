@@ -6,3 +6,8 @@
   background-color:green;
   color:white;
 }
+
+.complete-bet-form-plaintext {
+  padding-left: 10px;
+  font-weight: bold;
+}

@@ -1,4 +1,4 @@
-import React, { Component, ReactDOM } from 'react';
+import React, { Component } from 'react';
 import { Form, Button, Row, Col, Dropdown } from 'react-bootstrap';
 import './NewBet.css';
 import { getPostDataRequest } from './ApiRequests';
@@ -10,7 +10,6 @@ class NewBet extends Component {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.formRef = React.createRef();
-    this.toggleRef = React.createRef();
   }
 
   buildNewBet(accepter, challenger, odds, amount, description, endDate) {
@@ -25,7 +24,8 @@ class NewBet extends Component {
     newBetObj.status = "Pending";
     var date = new Date();
     var stringDate = date.toISOString(); 
-    newBetObj.createDate = stringDate;
+    var formattedDate = stringDate.substring(0, stringDate.indexOf('T'))
+    newBetObj.createDate = formattedDate;
     let jsonData = JSON.stringify(newBetObj);
 
     let postRequest = getPostDataRequest(jsonData);
@@ -33,7 +33,7 @@ class NewBet extends Component {
       console.log(response);
       if (response.ok) {
         this.props.dispatch({type:'ADD_BET', bet:newBetObj})
-      }
+      } 
     })
 
     
@@ -55,13 +55,13 @@ class NewBet extends Component {
 
 	render() {
     return (
-      <div className="bet-form">
+      <div className="new-bet-form-container">
         <Dropdown>
-          <Dropdown.Toggle ref={this.toggleRef} variant="success" id="dropdown-basic">
+          <Dropdown.Toggle variant="success" id="dropdown-basic">
             Add New Bet
           </Dropdown.Toggle>
             <Dropdown.Menu ref={this.formRef}>
-              <Form onSubmit={this.handleSubmit}>
+              <Form className="new-bet-form" onSubmit={this.handleSubmit}>
               <Row>
                 <Col>
                   <Form.Group controlId="newBetChallenger">

@@ -1,0 +1,10 @@
+.complete-form {
+  background-color:rgb(223, 223, 205);
+  z-index:10;
+  position: absolute;
+  left: 15%;
+  right: 15%;
+  border-style: solid;
+  border-width: 3px;
+  border-color: #282c34;
+}

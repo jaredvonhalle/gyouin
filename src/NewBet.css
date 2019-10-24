@@ -1,8 +1,7 @@
-.new-bet {
-  text-align: left;
-  margin-bottom:20px;
+.new-bet-form-container {
+  margin: 20px;
 }
 
-.bet-form {
-  margin: 20px;
+.new-bet-form {
+  padding:15px;
 }
