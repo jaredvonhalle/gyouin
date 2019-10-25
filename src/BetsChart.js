@@ -119,8 +119,8 @@ class BetsChart extends Component {
       accessor: 'endDate',
       Cell: this.renderEditable
     },{
-      Header: 'Status',
-      accessor: 'status'
+      Header: 'Result',
+      accessor: 'result'
     },{
       Header: 'Save',
       Cell: props => {

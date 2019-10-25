@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { Form, Button, Row, Col, Dropdown } from 'react-bootstrap';
-import './NewBet.css';
+import './NewGroupBet.css';
 import { getPostDataRequest } from './ApiRequests';
 import { connect } from 'react-redux';
 
-class NewBet extends Component {
+class NewGroupBet extends Component {
 
   constructor(props) {
     super(props);
@@ -140,4 +140,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(NewBet);
+export default connect(mapStateToProps)(NewGroupBet);

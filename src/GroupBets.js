@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
-import './OverviewBets.css';
+import './GroupBets.css';
 import ReactTable from "react-table";
 import "react-table/react-table.css";
 import {getPutDataRequest, getDeleteDataRequest } from './ApiRequests';
 import { connect } from 'react-redux';
 import CompleteForm from './CompleteForm';
 
-class OverviewBets extends Component {
+class GroupBets extends Component {
 
   constructor(props) {
     super(props);
@@ -203,7 +203,7 @@ class OverviewBets extends Component {
       completeForm = <div></div>
     }
     return (
-      <div className="overview-bets container-fluid">
+      <div className="group-bets container-fluid">
         <div className="complete-form-container">
           {completeForm}
         </div>
@@ -232,4 +232,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps)(OverviewBets);
+export default connect(mapStateToProps)(GroupBets);

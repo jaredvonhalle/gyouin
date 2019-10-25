@@ -1,0 +1,13 @@
+.group-bets {
+  margin-top:60px;
+}
+
+.save-highlight {
+  background-color:green;
+  color:white;
+}
+
+.complete-bet-form-plaintext {
+  padding-left: 10px;
+  font-weight: bold;
+}

@@ -1,10 +1,13 @@
 import React from 'react';
 import './App.css';
 import OverviewBets from './OverviewBets';
+import GroupBets from './GroupBets';
 import NewBet from './NewBet';
+import NewGroupBet from './NewGroupBet';
 import insurance from './insurance.svg'
 import { Provider } from 'react-redux';
 import { createStore, bindActionCreators } from 'redux';
+import { Breadcrumb } from 'react-bootstrap';
 
 const initialState = {
   bets:[],
@@ -47,12 +50,16 @@ function reducer(state = initialState, action) {
       if(!successInd) {
         alert("Not able to save bet. Don't blam Jared");
       }
-      return {bets:currBets};
+      return {...state,
+        bets:currBets
+      };
     case 'DELETE_BET':
       var newBets = state.bets.filter(function( obj ) {
         return obj.id !== action.id;
       });
-      return {bets:newBets};
+      return {...state,
+        bets:newBets
+      };
     case 'SET_BET_SAVE_IND_TRUE':
       var currBets = [...state.bets]
       currBets.forEach(function(part, index, theArray) {
@@ -60,9 +67,13 @@ function reducer(state = initialState, action) {
           theArray[index]['saveInd'] = true;
         }
       })
-      return {bets:currBets};
+      return {...state,
+        bets:currBets
+      };
     case 'ADD_BET':
-      return {bets:[...state.bets, action.bet]}
+      return {...state,
+        bets:[...state.bets, action.bet]
+      }
     default:
       return state;
   }
@@ -82,6 +93,8 @@ function App() {
         </header>
         <NewBet/>
         <OverviewBets/>
+        <NewGroupBet/>
+        <GroupBets/>
       </div>
     </Provider>
   );
