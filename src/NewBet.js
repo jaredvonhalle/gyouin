@@ -58,9 +58,10 @@ class NewBet extends Component {
 	render() {
     return (
       <div className="new-bet-form-container">
-        <Dropdown>
-          <Dropdown.Toggle variant="success" id="dropdown-basic">
-            Add New Bet
+        <div className="personal-bets-title">Personal Bets</div>
+        <Dropdown className="new-bet-dropdown">
+          <Dropdown.Toggle variant="secondary" id="dropdown-basic">
+            Add New Personal Bet
           </Dropdown.Toggle>
             <Dropdown.Menu ref={this.formRef}>
               <Form className="new-bet-form" onSubmit={this.handleSubmit}>

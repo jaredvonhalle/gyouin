@@ -47,7 +47,7 @@ class OverviewBets extends Component {
   }
 
   saveRow(cellInfo) {
-    let data = this.props.bets[cellInfo.index]
+    let data = this.props.bets[cellInfo.original.id]
     this.saveBet(data);
   }
 
@@ -56,8 +56,8 @@ class OverviewBets extends Component {
   }
 
   deleteRow(cellInfo) {
-    if (window.confirm('Are you sure you wish to delete the following bet...\n\n' + this.getBetString(this.props.bets[cellInfo.index]))) {
-      let data = this.props.bets[cellInfo.index]
+    if (window.confirm('Are you sure you wish to delete the following bet...\n\n' + this.getBetString(this.props.bets[cellInfo.original.id]))) {
+      let data = this.props.bets[cellInfo.original.id]
       let deleteRequest = getDeleteDataRequest(data);
       deleteRequest().then(response => {
         console.log(response);
@@ -69,7 +69,7 @@ class OverviewBets extends Component {
   }
 
   completeRow(cellInfo) {
-    let data = this.props.bets[cellInfo.index]
+    let data = this.props.bets[cellInfo.original.id]
     this.props.dispatch({type:'SHOW_COMPLETE_FORM', completeBet:data})
   }
 
@@ -80,15 +80,13 @@ class OverviewBets extends Component {
         contentEditable
         suppressContentEditableWarning
         onBlur={e => {
-          const data = [...this.props.bets];
-          var changedInd = (data[cellInfo.index][cellInfo.column.id] == e.target.innerHTML) ? false : true
-          data[cellInfo.index][cellInfo.column.id] = parseFloat(e.target.innerHTML);
+          var changedInd = (this.props.bets[cellInfo.original.id][cellInfo.column.id] == parseFloat(e.target.innerHTML)) ? false : true
           if (changedInd) {
-            this.props.dispatch({type:'SET_BET_SAVE_IND_TRUE', id:data[cellInfo.index].id})
+            this.props.dispatch({type:'SET_BET_SAVE_IND_TRUE', id:cellInfo.original.id})
           }
         }}
         dangerouslySetInnerHTML={{
-          __html: this.props.bets[cellInfo.index][cellInfo.column.id]
+          __html: this.props.bets[cellInfo.original.id][cellInfo.column.id]
         }}
       />
     );
@@ -100,15 +98,13 @@ class OverviewBets extends Component {
         contentEditable
         suppressContentEditableWarning
         onBlur={e => {
-          const data = [...this.props.bets];
-          var changedInd = (data[cellInfo.index][cellInfo.column.id] == e.target.innerHTML) ? false : true
-          data[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
+          var changedInd = (this.props.bets[cellInfo.original.id][cellInfo.column.id] == e.target.innerHTML) ? false : true
           if (changedInd) {
-            this.props.dispatch({type:'SET_BET_SAVE_IND_TRUE', id:data[cellInfo.index].id})
+            this.props.dispatch({type:'SET_BET_SAVE_IND_TRUE', id:cellInfo.original.id})
           }
         }}
         dangerouslySetInnerHTML={{
-          __html: this.props.bets[cellInfo.index][cellInfo.column.id]
+          __html: this.props.bets[cellInfo.original.id][cellInfo.column.id]
         }}
       />
     );
@@ -151,8 +147,8 @@ class OverviewBets extends Component {
       Header: 'Save',
       Cell: props => {
         return(
-          <button disabled={(this.props.bets[props.index].saveInd ? '' : true)} 
-                  className={(this.props.bets[props.index].saveInd ? 'save-highlight' : '')} 
+          <button disabled={(this.props.bets[props.original.id].saveInd ? '' : true)} 
+                  className={(this.props.bets[props.original.id].saveInd ? 'save-highlight' : '')} 
                   onClick={() => this.saveRow(props)}>
             Save
           </button>
@@ -167,7 +163,7 @@ class OverviewBets extends Component {
       Header: 'Complete',
       Cell: props => {
         return(
-          <button disabled={(this.props.bets[props.index].isComplete ? true : '')}
+          <button disabled={(this.props.bets[props.original.id].isComplete ? true : '')}
                   onClick={() => this.completeRow(props)}>
             Complete
           </button>
@@ -202,6 +198,11 @@ class OverviewBets extends Component {
     } else {
       completeForm = <div></div>
     }
+
+    let personalBets = Object.values(this.props.bets).filter(function(el) {
+      return el.type == "PERSONAL";
+    })
+
     return (
       <div className="overview-bets container-fluid">
         <div className="complete-form-container">
@@ -209,7 +210,7 @@ class OverviewBets extends Component {
         </div>
         <ReactTable
           className="-striped"
-          data={this.props.bets}
+          data={personalBets}
           columns={columns}
           defaultPageSize = {10}
           filterable

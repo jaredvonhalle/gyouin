@@ -1,7 +1,16 @@
 .new-bet-form-container {
-  margin: 20px;
+
+}
+
+.new-bet-dropdown {
+  padding-left:15px;
 }
 
 .new-bet-form {
   padding:15px;
+}
+
+.personal-bets-title {
+  text-align: center;
+  font-size: x-large;
 }

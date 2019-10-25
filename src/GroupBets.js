@@ -3,8 +3,9 @@ import './GroupBets.css';
 import ReactTable from "react-table";
 import "react-table/react-table.css";
 import {getPutDataRequest, getDeleteDataRequest } from './ApiRequests';
+import CompleteGroupForm from './CompleteGroupForm';
 import { connect } from 'react-redux';
-import CompleteForm from './CompleteForm';
+
 
 class GroupBets extends Component {
 
@@ -47,7 +48,7 @@ class GroupBets extends Component {
   }
 
   saveRow(cellInfo) {
-    let data = this.props.bets[cellInfo.index]
+    let data = this.props.bets[cellInfo.original.id]
     this.saveBet(data);
   }
 
@@ -56,8 +57,8 @@ class GroupBets extends Component {
   }
 
   deleteRow(cellInfo) {
-    if (window.confirm('Are you sure you wish to delete the following bet...\n\n' + this.getBetString(this.props.bets[cellInfo.index]))) {
-      let data = this.props.bets[cellInfo.index]
+    if (window.confirm('Are you sure you wish to delete the following bet: ' + cellInfo.original.description)) {
+      let data = this.props.bets[cellInfo.original.id]
       let deleteRequest = getDeleteDataRequest(data);
       deleteRequest().then(response => {
         console.log(response);
@@ -69,8 +70,8 @@ class GroupBets extends Component {
   }
 
   completeRow(cellInfo) {
-    let data = this.props.bets[cellInfo.index]
-    this.props.dispatch({type:'SHOW_COMPLETE_FORM', completeBet:data})
+    let data = this.props.bets[cellInfo.original.id]
+    this.props.dispatch({type:'SHOW_GROUP_COMPLETE_FORM', completeBet:data})
   }
 
   renderEditableNumber(cellInfo) {
@@ -80,15 +81,13 @@ class GroupBets extends Component {
         contentEditable
         suppressContentEditableWarning
         onBlur={e => {
-          const data = [...this.props.bets];
-          var changedInd = (data[cellInfo.index][cellInfo.column.id] == e.target.innerHTML) ? false : true
-          data[cellInfo.index][cellInfo.column.id] = parseFloat(e.target.innerHTML);
+          var changedInd = (this.props.bets[cellInfo.original.id][cellInfo.column.id] == parseFloat(e.target.innerHTML)) ? false : true
           if (changedInd) {
-            this.props.dispatch({type:'SET_BET_SAVE_IND_TRUE', id:data[cellInfo.index].id})
+            this.props.dispatch({type:'SET_BET_SAVE_IND_TRUE', id:cellInfo.original.id})
           }
         }}
         dangerouslySetInnerHTML={{
-          __html: this.props.bets[cellInfo.index][cellInfo.column.id]
+          __html: this.props.bets[cellInfo.original.id][cellInfo.column.id]
         }}
       />
     );
@@ -100,15 +99,13 @@ class GroupBets extends Component {
         contentEditable
         suppressContentEditableWarning
         onBlur={e => {
-          const data = [...this.props.bets];
-          var changedInd = (data[cellInfo.index][cellInfo.column.id] == e.target.innerHTML) ? false : true
-          data[cellInfo.index][cellInfo.column.id] = e.target.innerHTML;
+          var changedInd = (this.props.bets[cellInfo.original.id][cellInfo.column.id] == e.target.innerHTML) ? false : true
           if (changedInd) {
-            this.props.dispatch({type:'SET_BET_SAVE_IND_TRUE', id:data[cellInfo.index].id})
+            this.props.dispatch({type:'SET_BET_SAVE_IND_TRUE', id:cellInfo.original.id})
           }
         }}
         dangerouslySetInnerHTML={{
-          __html: this.props.bets[cellInfo.index][cellInfo.column.id]
+          __html: this.props.bets[cellInfo.original.id][cellInfo.column.id]
         }}
       />
     );
@@ -117,20 +114,8 @@ class GroupBets extends Component {
 	render() {
 
     const columns = [{
-      Header: 'Challenger',
-      accessor: 'challenger',
-      Cell: this.renderEditable
-    },{
-      Header: 'Odds',
-      accessor: 'odds',
-      Cell: this.renderEditable
-    },{
       Header: 'Description',
       accessor: 'description',
-      Cell: this.renderEditable
-    },{
-      Header: 'Accepter',
-      accessor: 'accepter',
       Cell: this.renderEditable
     },{
       Header: 'Base Amount',
@@ -151,8 +136,8 @@ class GroupBets extends Component {
       Header: 'Save',
       Cell: props => {
         return(
-          <button disabled={(this.props.bets[props.index].saveInd ? '' : true)} 
-                  className={(this.props.bets[props.index].saveInd ? 'save-highlight' : '')} 
+          <button disabled={(this.props.bets[props.original.id].saveInd ? '' : true)} 
+                  className={(this.props.bets[props.original.id].saveInd ? 'save-highlight' : '')} 
                   onClick={() => this.saveRow(props)}>
             Save
           </button>
@@ -167,7 +152,7 @@ class GroupBets extends Component {
       Header: 'Complete',
       Cell: props => {
         return(
-          <button disabled={(this.props.bets[props.index].isComplete ? true : '')}
+          <button disabled={(this.props.bets[props.original.id].isComplete ? true : '')}
                   onClick={() => this.completeRow(props)}>
             Complete
           </button>
@@ -194,22 +179,27 @@ class GroupBets extends Component {
       minWidth:100
     }]
 
-    const showCompleteForm = this.props.showCompleteForm;
-    let completeForm
+    const showGroupCompleteForm = this.props.showGroupCompleteForm;
+    let completeGroupForm;
 
-    if(showCompleteForm) {
-      completeForm = <CompleteForm/>
+    if(showGroupCompleteForm) {
+      completeGroupForm = <CompleteGroupForm/>
     } else {
-      completeForm = <div></div>
+      completeGroupForm = <div></div>
     }
+
+    let groupBets = Object.values(this.props.bets).filter(function(el) {
+      return el.type == "GROUP";
+    })
+
     return (
       <div className="group-bets container-fluid">
         <div className="complete-form-container">
-          {completeForm}
+          {completeGroupForm}
         </div>
         <ReactTable
           className="-striped"
-          data={this.props.bets}
+          data={groupBets}
           columns={columns}
           defaultPageSize = {10}
           filterable
@@ -227,8 +217,9 @@ class GroupBets extends Component {
 function mapStateToProps(state) {
   return {
     bets: state.bets,
-    showCompleteForm: state.showCompleteForm,
-    currCompleteBet: state.currCompleteBet
+    showGroupCompleteForm: state.showGroupCompleteForm,
+    currGroupCompleteBet: state.currGroupCompleteBet,
+    betsJson: state.betsJson
   };
 }
 

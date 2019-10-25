@@ -7,12 +7,13 @@ import NewGroupBet from './NewGroupBet';
 import insurance from './insurance.svg'
 import { Provider } from 'react-redux';
 import { createStore, bindActionCreators } from 'redux';
-import { Breadcrumb } from 'react-bootstrap';
+import produce from "immer"
 
 const initialState = {
-  bets:[],
+  bets:{},
   showCompleteForm:false,
-  currCompleteBet:{}
+  currCompleteBet:{},
+  currGroupCompleteBet:{}
 };
 
 function reducer(state = initialState, action) {
@@ -21,59 +22,50 @@ function reducer(state = initialState, action) {
 
   switch(action.type) {
     case 'GET_BETS':
-      return {
-        ...state, 
-        bets:action.bets
-      };
-    case 'SHOW_COMPLETE_FORM':
-      return {
-        ...state,
-        showCompleteForm:true,
-        currCompleteBet:action.completeBet
-      }
-    case 'HIDE_COMPLETE_FORM':
-      return {
-        ...state,
-        showCompleteForm:false,
-        currCompleteBet:{}
-      }
-    case 'SAVE_BET':
-      var successInd = false
-      var currBets = [...state.bets]
-      currBets.forEach(function(part, index, theArray) {
-        if (part.id === action.bet.id) {
-          theArray[index] = action.bet;
-          theArray[index].saveInd = false;
-          successInd = true
-        }
+      let betsJson = {}
+      action.bets.forEach(function(part) {
+        betsJson[part.id] = part
       })
-      if(!successInd) {
-        alert("Not able to save bet. Don't blam Jared");
-      }
-      return {...state,
-        bets:currBets
-      };
-    case 'DELETE_BET':
-      var newBets = state.bets.filter(function( obj ) {
-        return obj.id !== action.id;
+      return produce(state, draft => {
+        draft.bets= betsJson;
       });
-      return {...state,
-        bets:newBets
-      };
+    case 'SHOW_COMPLETE_FORM':
+      return produce(state, draft => {
+        draft.showCompleteForm=true;
+        draft.currCompleteBet=action.completeBet
+      });  
+    case 'HIDE_COMPLETE_FORM':
+      return produce(state, draft => {
+        draft.showCompleteForm=false;
+        draft.currCompleteBet={}
+      }); 
+    case 'SHOW_GROUP_COMPLETE_FORM':
+        return produce(state, draft => {
+          draft.showGroupCompleteForm=true;
+          draft.currGroupCompleteBet=action.completeBet
+        });  
+    case 'HIDE_GROUP_COMPLETE_FORM':
+      return produce(state, draft => {
+        draft.showGroupCompleteForm=false;
+        draft.currGroupCompleteBet={}
+      });    
+    case 'SAVE_BET':
+      return produce(state, draft => {
+        draft.bets[action.bet.id] = action.bet
+        draft.bets[action.bet.id].saveInd = false
+      });   
+    case 'DELETE_BET':
+      return produce(state, draft => {
+        delete draft.bets[action.id]
+      });   
     case 'SET_BET_SAVE_IND_TRUE':
-      var currBets = [...state.bets]
-      currBets.forEach(function(part, index, theArray) {
-        if (part.id === action.id) {
-          theArray[index]['saveInd'] = true;
-        }
-      })
-      return {...state,
-        bets:currBets
-      };
+      return produce(state, draft => {
+        draft.bets[action.id].saveInd = true
+      });
     case 'ADD_BET':
-      return {...state,
-        bets:[...state.bets, action.bet]
-      }
+      return produce(state, draft => {
+        draft.bets[action.bet.id] = action.bet
+      });
     default:
       return state;
   }

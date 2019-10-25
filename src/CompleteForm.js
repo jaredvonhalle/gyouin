@@ -14,8 +14,8 @@ class CompleteForm extends Component {
 
   handleSubmit = event => {
     event.preventDefault();
-    let bet = this.props.currCompleteBet
-    bet.results = [
+
+    let results = [
       {
         player:this.props.currCompleteBet.challenger,
         amount:parseFloat(event.target.elements.completeBetChallengerAmount.value)
@@ -25,13 +25,19 @@ class CompleteForm extends Component {
         amount:parseFloat(event.target.elements.completeBetAccepterAmount.value)
       }
     ]
+
     let resultString = "";
-    bet.results.forEach(function(result) {
+    results.forEach(function(result) {
       resultString += result.player + "  " + result.amount + "\r\n";
     })
-    bet.resultString = resultString;
-    bet.isComplete = true;
-    this.saveBet(bet);
+
+    let currBet = JSON.parse(JSON.stringify(this.props.currCompleteBet))
+
+    currBet.results = results;
+    currBet.resultString = resultString;
+    currBet.isComplete = true;
+
+    this.saveBet(currBet);
     this.props.dispatch({type:'HIDE_COMPLETE_FORM'})
   };
 

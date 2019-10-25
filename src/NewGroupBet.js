@@ -12,17 +12,15 @@ class NewGroupBet extends Component {
     this.formRef = React.createRef();
   }
 
-  buildNewBet(accepter, challenger, odds, amount, description, endDate) {
+  buildNewBet(players, amount, description, endDate) {
     let newBetObj = {};
     newBetObj.id = (Math.random() * 100000000000000000000).toString() + Date.now().toString();
-    newBetObj.accepter = accepter;
-    newBetObj.challenger = challenger;
-    newBetObj.odds = odds;
+    newBetObj.players = players;
     newBetObj.amount = parseFloat(amount);
     newBetObj.description = description;
     newBetObj.endDate = endDate;
     newBetObj.resultString = "Pending";
-    newBetObj.type = "PERSONAL";
+    newBetObj.type = "GROUP";
     newBetObj.result = [];
     var date = new Date();
     var stringDate = date.toISOString(); 
@@ -43,10 +41,16 @@ class NewGroupBet extends Component {
 
   handleSubmit = event => {
     event.preventDefault();
+    let players = []
+    if (event.target.elements.Andrew.checked) {players.push("Andrew")}
+    if (event.target.elements.Ben.checked) {players.push("Ben")}
+    if (event.target.elements.Jared.checked) {players.push("Jared")}
+    if (event.target.elements.Mark.checked) {players.push("Mark")}
+    if (event.target.elements.Matt.checked) {players.push("Matt")}
+    if (event.target.elements.Max.checked) {players.push("Max")}
+    if (event.target.elements.Zach.checked) {players.push("Zach")}
     this.buildNewBet(
-      event.target.elements.newBetAccepter.value,
-      event.target.elements.newBetChallenger.value,
-      event.target.elements.newBetOdds.value,
+      players,
       event.target.elements.newBetAmount.value,
       event.target.elements.newBetDescription.value,
       event.target.elements.newBetEndDate.value
@@ -58,45 +62,59 @@ class NewGroupBet extends Component {
 	render() {
     return (
       <div className="new-bet-form-container">
-        <Dropdown>
-          <Dropdown.Toggle variant="success" id="dropdown-basic">
-            Add New Bet
+        <div className="group-bets-title">Group Bets</div>
+        <Dropdown className="new-bet-dropdown">
+          <Dropdown.Toggle variant="secondary" id="dropdown-basic">
+            Add New Group Bet
           </Dropdown.Toggle>
             <Dropdown.Menu ref={this.formRef}>
               <Form className="new-bet-form" onSubmit={this.handleSubmit}>
               <Row>
                 <Col>
-                  <Form.Group controlId="newBetChallenger">
-                    <Form.Label>Challenger</Form.Label>
-                    <Form.Control as="select">
-                      <option>Andrew</option>
-                      <option>Ben</option>
-                      <option>Jared</option>
-                      <option>Mark</option>
-                      <option>Matt</option>
-                      <option>Max</option>
-                      <option>Zach</option>
-                    </Form.Control>
-                  </Form.Group>
+                <Form.Check 
+                  type='checkbox'
+                  id='Andrew'
+                  label='Andrew'
+                />
+                <Form.Check 
+                  type='checkbox'
+                  id='Ben'
+                  label='Ben'
+                />
+                <Form.Check 
+                  type='checkbox'
+                  id='Jared'
+                  label='Jared'
+                />
+                <Form.Check 
+                  type='checkbox'
+                  id='Mark'
+                  label='Mark'
+                />
+                <Form.Check 
+                  type='checkbox'
+                  id='Matt'
+                  label='Matt'
+                />
+                <Form.Check 
+                  type='checkbox'
+                  id='Max'
+                  label='Max'
+                />
+                <Form.Check 
+                  type='checkbox'
+                  id='Zach'
+                  label='Zach'
+                />
                 </Col>
                 <Col>
-                  <Form.Group controlId="newBetOdds">
-                    <Form.Label>Odds</Form.Label>
-                    <Form.Control type="text" placeholder="x:y" />
+                  <Form.Group controlId="newBetAmount">
+                    <Form.Label>Amount</Form.Label>
+                    <Form.Control type="number" placeholder="0.00"/>
                   </Form.Group>
-                </Col>
-                <Col>
-                  <Form.Group controlId="newBetAccepter">
-                    <Form.Label>Accepter</Form.Label>
-                    <Form.Control as="select">
-                      <option>Andrew</option>
-                      <option>Ben</option>
-                      <option>Jared</option>
-                      <option>Mark</option>
-                      <option>Matt</option>
-                      <option>Max</option>
-                      <option>Zach</option>
-                    </Form.Control>
+                  <Form.Group controlId="newBetEndDate">
+                    <Form.Label>End Date</Form.Label>
+                    <Form.Control type="date"/>
                   </Form.Group>
                 </Col>
               </Row>
@@ -105,20 +123,6 @@ class NewGroupBet extends Component {
                   <Form.Group controlId="newBetDescription">
                     <Form.Label>Description</Form.Label>
                     <Form.Control type="text" placeholder="Enter Description" />
-                  </Form.Group>
-                </Col>
-              </Row>
-              <Row>
-                <Col>
-                  <Form.Group controlId="newBetAmount">
-                    <Form.Label>Amount</Form.Label>
-                    <Form.Control type="number" placeholder="0.00"/>
-                  </Form.Group>
-                </Col>
-                <Col>
-                  <Form.Group controlId="newBetEndDate">
-                    <Form.Label>End Date</Form.Label>
-                    <Form.Control type="date"/>
                   </Form.Group>
                 </Col>
               </Row>
