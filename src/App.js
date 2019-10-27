@@ -60,6 +60,10 @@ function reducer(state = initialState, action) {
       return produce(state, draft => {
         draft.bets[action.id].saveInd = true
       });
+    case 'SET_BET_SAVE_IND_FALSE':
+      return produce(state, draft => {
+        draft.bets[action.id].saveInd = false
+      });
     case 'ADD_BET':
       return produce(state, draft => {
         draft.bets[action.bet.id] = action.bet

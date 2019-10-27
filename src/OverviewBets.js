@@ -37,7 +37,7 @@ class OverviewBets extends Component {
     putRequest().then(response => {
       console.log(response);
       if (response.ok) {
-        this.props.dispatch({type:'SAVE_BET', bet:data})
+        this.props.dispatch({type:'SET_BET_SAVE_IND_FALSE', id:data.id});
         alert("Save Successful");
       } else {
         alert("Failed to save. Don't blame Jared");
@@ -82,7 +82,10 @@ class OverviewBets extends Component {
         onBlur={e => {
           var changedInd = (this.props.bets[cellInfo.original.id][cellInfo.column.id] == parseFloat(e.target.innerHTML)) ? false : true
           if (changedInd) {
-            this.props.dispatch({type:'SET_BET_SAVE_IND_TRUE', id:cellInfo.original.id})
+            let currBet = JSON.parse(JSON.stringify(this.props.bets[cellInfo.original.id]));
+            currBet[cellInfo.column.id] = parseFloat(e.target.innerHTML);
+            this.props.dispatch({type:'SAVE_BET', bet:currBet});
+            this.props.dispatch({type:'SET_BET_SAVE_IND_TRUE', id:cellInfo.original.id});
           }
         }}
         dangerouslySetInnerHTML={{
@@ -100,6 +103,9 @@ class OverviewBets extends Component {
         onBlur={e => {
           var changedInd = (this.props.bets[cellInfo.original.id][cellInfo.column.id] == e.target.innerHTML) ? false : true
           if (changedInd) {
+            let currBet = JSON.parse(JSON.stringify(this.props.bets[cellInfo.original.id]));
+            currBet[cellInfo.column.id] = e.target.innerHTML;
+            this.props.dispatch({type:'SAVE_BET', bet:currBet});
             this.props.dispatch({type:'SET_BET_SAVE_IND_TRUE', id:cellInfo.original.id})
           }
         }}
