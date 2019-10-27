@@ -17,6 +17,7 @@ class NewBet extends Component {
     newBetObj.id = (Math.random() * 100000000000000000000).toString() + Date.now().toString();
     newBetObj.accepter = accepter;
     newBetObj.challenger = challenger;
+    newBetObj.players = [accepter,challenger];
     newBetObj.odds = odds;
     newBetObj.amount = parseFloat(amount);
     newBetObj.description = description;

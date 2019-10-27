@@ -1,9 +1,6 @@
 import React from 'react';
 import './App.css';
-import OverviewBets from './OverviewBets';
-import GroupBets from './GroupBets';
-import NewBet from './NewBet';
-import NewGroupBet from './NewGroupBet';
+import Betting from './Betting';
 import insurance from './insurance.svg'
 import { Provider } from 'react-redux';
 import { createStore, bindActionCreators } from 'redux';
@@ -13,7 +10,8 @@ const initialState = {
   bets:{},
   showCompleteForm:false,
   currCompleteBet:{},
-  currGroupCompleteBet:{}
+  currGroupCompleteBet:{},
+  stats:{}
 };
 
 function reducer(state = initialState, action) {
@@ -66,6 +64,10 @@ function reducer(state = initialState, action) {
       return produce(state, draft => {
         draft.bets[action.bet.id] = action.bet
       });
+    case 'SET_STATISTICS':
+      return produce(state, draft => {
+        draft.stats = action.stats;
+      })
     default:
       return state;
   }
@@ -83,10 +85,7 @@ function App() {
           </p>
           <img className="App-insurance" src={insurance}></img>
         </header>
-        <NewBet/>
-        <OverviewBets/>
-        <NewGroupBet/>
-        <GroupBets/>
+        <Betting/>
       </div>
     </Provider>
   );

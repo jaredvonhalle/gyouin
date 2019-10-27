@@ -18,21 +18,6 @@ class GroupBets extends Component {
     this.completeRow = this.completeRow.bind(this);
   }
 
-  componentDidMount() {
-    const url = '/api/Bets';
-
-    fetch(
-      url
-    )
-    .then(response => {
-      return response.json();
-    })
-    .then(data => {
-      this.props.dispatch({type:'GET_BETS', bets:data})
-    })
-    
-  }
-
   saveBet(data) {
     let putRequest = getPutDataRequest(data);
     putRequest().then(response => {
@@ -212,6 +197,7 @@ class GroupBets extends Component {
       </div>
     );
   }
+  
 }
 
 function mapStateToProps(state) {
