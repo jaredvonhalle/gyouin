@@ -68,21 +68,27 @@ class Betting extends Component {
           let oddsSplit = bet.odds.split(":");
           let giving = oddsSplit[0];
           let getting = oddsSplit[1];
-          let oddsRatio = parseFloat(giving)/parseFloat(getting);
-          if (oddsRatio > 1) {
-            stats[bet.challenger].exposure += (bet.amount * oddsRatio);
-            stats[bet.accepter].exposure += bet.amount;
-          } else if (oddsRatio < 1) {
+          
+          if (giving > getting) {
+            let oddsRatio = parseFloat(giving)/parseFloat(getting);
             stats[bet.accepter].exposure += (bet.amount * oddsRatio);
             stats[bet.challenger].exposure += bet.amount;
+          } else if (getting > giving) {
+            let oddsRatio = parseFloat(getting)/parseFloat(giving);
+            stats[bet.challenger].exposure += (bet.amount * oddsRatio);
+            stats[bet.accepter].exposure += bet.amount;
           } else {
             stats[bet.challenger].exposure += bet.amount;
             stats[bet.accepter].exposure += bet.amount;
           }
+
+          stats[bet.challenger].numberOngoing += 1;
+          stats[bet.accepter].numberOngoing += 1;
           
         } else {
           bet.players.forEach(function(player) {
             stats[player].exposure += bet.amount;
+            stats[player].numberOngoing += 1;
           })
         }
       }

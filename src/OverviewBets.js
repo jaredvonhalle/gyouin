@@ -123,7 +123,7 @@ class OverviewBets extends Component {
       accessor: 'challenger',
       Cell: this.renderEditable
     },{
-      Header: 'Odds',
+      Header: 'Odds (giving)',
       accessor: 'odds',
       Cell: this.renderEditable
     },{
@@ -149,6 +149,15 @@ class OverviewBets extends Component {
     },{
       Header: 'Result',
       accessor: 'resultString',
+      Cell: props => {
+        return(
+          <div
+            dangerouslySetInnerHTML={{
+              __html: props.value
+            }}
+          />
+        )
+      }
     },{
       Header: 'Save',
       Cell: props => {
@@ -210,7 +219,7 @@ class OverviewBets extends Component {
     })
 
     return (
-      <div className="overview-bets container-fluid">
+      <div className="overview-bets">
         <div className="complete-form-container">
           {completeForm}
         </div>

@@ -1,6 +1,8 @@
 .overview-bets {
   padding-top:10px;
-  padding-bottom:60px
+  padding-bottom:60px;
+  padding-left:15px;
+  padding-right:15px;
 }
 
 .save-highlight {

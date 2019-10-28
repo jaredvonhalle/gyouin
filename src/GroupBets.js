@@ -105,6 +105,18 @@ class GroupBets extends Component {
 	render() {
 
     const columns = [{
+      Header: 'Players',
+      accessor: 'playersHtml',
+      Cell: props => {
+        return(
+          <div
+            dangerouslySetInnerHTML={{
+              __html: props.value
+            }}
+          />
+        )
+      }
+    },{
       Header: 'Description',
       accessor: 'description',
       Cell: this.renderEditable
@@ -123,6 +135,15 @@ class GroupBets extends Component {
     },{
       Header: 'Result',
       accessor: 'resultString',
+      Cell: props => {
+        return(
+          <div
+            dangerouslySetInnerHTML={{
+              __html: props.value
+            }}
+          />
+        )
+      }
     },{
       Header: 'Save',
       Cell: props => {
@@ -184,7 +205,7 @@ class GroupBets extends Component {
     })
 
     return (
-      <div className="group-bets container-fluid">
+      <div className="group-bets">
         <div className="complete-form-container">
           {completeGroupForm}
         </div>

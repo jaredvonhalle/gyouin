@@ -44,15 +44,17 @@ class Statistics extends Component {
 
     return (
       <div className="stats-container">
+        <div className="stats-title">Statistics</div>
         <ReactTable
           className="-striped"
           data={renderStats}
           columns={columns}
           defaultPageSize = {7}
-          filterable
+          showPagination={false}
           defaultSorted={[
             {
-              id: "winnings"
+              id: "winnings",
+              desc:true
             }
           ]}
         />

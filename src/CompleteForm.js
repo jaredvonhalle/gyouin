@@ -28,7 +28,7 @@ class CompleteForm extends Component {
 
     let resultString = "";
     results.forEach(function(result) {
-      resultString += result.player + "  " + result.amount + "\r\n";
+      resultString += "<div>" + result.player + "  " + result.amount + "</div>";
     })
 
     let currBet = JSON.parse(JSON.stringify(this.props.currCompleteBet))

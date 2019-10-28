@@ -16,6 +16,13 @@ class NewGroupBet extends Component {
     let newBetObj = {};
     newBetObj.id = (Math.random() * 100000000000000000000).toString() + Date.now().toString();
     newBetObj.players = players;
+
+    let playersHtml = "";
+    players.forEach(function(player) {
+      playersHtml += "<div>" + player + "</div>"
+    })
+
+    newBetObj.playersHtml = playersHtml;
     newBetObj.amount = parseFloat(amount);
     newBetObj.description = description;
     newBetObj.endDate = endDate;
