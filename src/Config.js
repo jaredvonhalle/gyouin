@@ -1,5 +1,5 @@
 const Data = {
-	"players":["Andrew", "Ben", "Jared", "Mark", "Matt", "Max", "Zach"]
+	"players":["Andrew", "Ben", "Jared", "Marc", "Matt", "Max", "Zach"]
 }
 
 export default Data;

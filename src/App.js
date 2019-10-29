@@ -11,7 +11,8 @@ const initialState = {
   showCompleteForm:false,
   currCompleteBet:{},
   currGroupCompleteBet:{},
-  stats:{}
+  stats:{},
+  rate:""
 };
 
 function reducer(state = initialState, action) {
@@ -71,6 +72,10 @@ function reducer(state = initialState, action) {
     case 'SET_STATISTICS':
       return produce(state, draft => {
         draft.stats = action.stats;
+      })
+    case 'SET_RATE':
+      return produce(state, draft => {
+        draft.rate = action.rate;
       })
     default:
       return state;

@@ -3,6 +3,7 @@ import { Form, Button, Row, Col, Dropdown } from 'react-bootstrap';
 import './NewGroupBet.css';
 import { getPostDataRequest } from './ApiRequests';
 import { connect } from 'react-redux';
+import {validateGroupBet} from './BetUtils';
 
 class NewGroupBet extends Component {
 
@@ -33,17 +34,20 @@ class NewGroupBet extends Component {
     var stringDate = date.toISOString(); 
     var formattedDate = stringDate.substring(0, stringDate.indexOf('T'))
     newBetObj.createDate = formattedDate;
-    let jsonData = JSON.stringify(newBetObj);
 
-    let postRequest = getPostDataRequest(jsonData);
-    postRequest().then(response => {
-      console.log(response);
-      if (response.ok) {
-        this.props.dispatch({type:'ADD_BET', bet:newBetObj})
-      } 
-    })
-
-    
+    let checkObj = validateGroupBet(newBetObj)
+    if(checkObj.isValid) {
+      let jsonData = JSON.stringify(newBetObj);
+      let postRequest = getPostDataRequest(jsonData);
+      postRequest().then(response => {
+        console.log(response);
+        if (response.ok) {
+          this.props.dispatch({type:'ADD_BET', bet:newBetObj})
+        } 
+      })
+    } else {
+      alert(checkObj.msg);
+    }
   }
 
   handleSubmit = event => {
@@ -52,7 +56,7 @@ class NewGroupBet extends Component {
     if (event.target.elements.Andrew.checked) {players.push("Andrew")}
     if (event.target.elements.Ben.checked) {players.push("Ben")}
     if (event.target.elements.Jared.checked) {players.push("Jared")}
-    if (event.target.elements.Mark.checked) {players.push("Mark")}
+    if (event.target.elements.Marc.checked) {players.push("Marc")}
     if (event.target.elements.Matt.checked) {players.push("Matt")}
     if (event.target.elements.Max.checked) {players.push("Max")}
     if (event.target.elements.Zach.checked) {players.push("Zach")}
@@ -95,8 +99,8 @@ class NewGroupBet extends Component {
                 />
                 <Form.Check 
                   type='checkbox'
-                  id='Mark'
-                  label='Mark'
+                  id='Marc'
+                  label='Marc'
                 />
                 <Form.Check 
                   type='checkbox'

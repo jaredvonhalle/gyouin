@@ -5,6 +5,7 @@ import "react-table/react-table.css";
 import {getPutDataRequest, getDeleteDataRequest } from './ApiRequests';
 import CompleteGroupForm from './CompleteGroupForm';
 import { connect } from 'react-redux';
+import {validateGroupBet} from './BetUtils';
 
 
 class GroupBets extends Component {
@@ -19,17 +20,22 @@ class GroupBets extends Component {
   }
 
   saveBet(data) {
-    let putRequest = getPutDataRequest(data);
-    putRequest().then(response => {
-      console.log(response);
-      if (response.ok) {
-        this.props.dispatch({type:'SET_BET_SAVE_IND_FALSE', id:data.id});
-        alert("Save Successful");
-      } else {
-        alert("Failed to save. Don't blame Jared");
-      }
-      
-    });
+    let checkObj = validateGroupBet(data)
+    if(checkObj.isValid) {
+      let putRequest = getPutDataRequest(data);
+      putRequest().then(response => {
+        console.log(response);
+        if (response.ok) {
+          this.props.dispatch({type:'SET_BET_SAVE_IND_FALSE', id:data.id});
+          alert("Save Successful");
+        } else {
+          alert("Failed to save. Don't blame Jared");
+        }
+      });
+    } else {
+      alert(checkObj.msg);
+    }
+
   }
 
   saveRow(cellInfo) {
@@ -70,8 +76,10 @@ class GroupBets extends Component {
           if (changedInd) {
             let currBet = JSON.parse(JSON.stringify(this.props.bets[cellInfo.original.id]));
             currBet[cellInfo.column.id] = parseFloat(e.target.innerHTML);
-            this.props.dispatch({type:'SAVE_BET', bet:currBet});
-            this.props.dispatch({type:'SET_BET_SAVE_IND_TRUE', id:cellInfo.original.id})
+            if(!currBet.isComplete) {
+              this.props.dispatch({type:'SAVE_BET', bet:currBet});
+              this.props.dispatch({type:'SET_BET_SAVE_IND_TRUE', id:cellInfo.original.id})
+            }
           }
         }}
         dangerouslySetInnerHTML={{
@@ -91,8 +99,10 @@ class GroupBets extends Component {
           if (changedInd) {
             let currBet = JSON.parse(JSON.stringify(this.props.bets[cellInfo.original.id]));
             currBet[cellInfo.column.id] = e.target.innerHTML;
-            this.props.dispatch({type:'SAVE_BET', bet:currBet});
-            this.props.dispatch({type:'SET_BET_SAVE_IND_TRUE', id:cellInfo.original.id})
+            if(!currBet.isComplete) {
+              this.props.dispatch({type:'SAVE_BET', bet:currBet});
+              this.props.dispatch({type:'SET_BET_SAVE_IND_TRUE', id:cellInfo.original.id})
+            }
           }
         }}
         dangerouslySetInnerHTML={{
@@ -123,11 +133,13 @@ class GroupBets extends Component {
     },{
       Header: 'Base Amount',
       accessor: 'amount',
-      Cell: this.renderEditableNumber
+      Cell: this.renderEditableNumber,
+      defaultSortDesc: true
     },{
       Header: 'Create Date',
       accessor: 'createDate',
-      Cell: this.renderEditable
+      Cell: this.renderEditable,
+      defaultSortDesc: true
     },{
       Header: 'End Date',
       accessor: 'endDate',
@@ -213,7 +225,7 @@ class GroupBets extends Component {
           className="-striped"
           data={groupBets}
           columns={columns}
-          defaultPageSize = {10}
+          defaultPageSize = {5}
           filterable
           defaultSorted={[
             {

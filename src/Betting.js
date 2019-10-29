@@ -4,8 +4,10 @@ import GroupBets from './GroupBets';
 import NewBet from './NewBet';
 import NewGroupBet from './NewGroupBet';
 import Statistics from './Statistics';
+import Historical from './Historical';
 import { connect } from 'react-redux';
 import Config from './Config';
+import './Betting.css';
 
 class Betting extends Component {
 
@@ -13,10 +15,29 @@ class Betting extends Component {
     super(props);
     this.setBets = this.setBets.bind(this);
     this.setStats = this.setStats.bind(this);
+    this.setExchangeRates = this.setExchangeRates.bind(this);
   }
 
   componentWillMount() {
     this.setBets()
+  }
+
+  componentDidMount() {
+    this.setExchangeRates()
+  }
+
+  setExchangeRates() {
+    const url = 'https://api.exchangeratesapi.io/latest?base=AUD&symbols=USD';
+    fetch(
+      url
+    )
+    .then(response => {
+      return response.json();
+    })
+    .then(data => {
+      this.props.dispatch({type:'SET_RATE', rate:data.rates.USD})
+      this.setStats();
+    })
   }
 
   setBets() {
@@ -38,6 +59,7 @@ class Betting extends Component {
       "name":"",
       "winnings":0,
       "exposure":0,
+      "totalBet":0,
       "numberComplete":0,
       "numberOngoing":0,
       "challenges":0,
@@ -53,6 +75,7 @@ class Betting extends Component {
     })
     
     Object.values(this.props.bets).forEach(function(bet) {
+
       if (bet.isComplete) {
         bet.results.forEach(function(result) {
           let currPlayer = result.player;
@@ -61,6 +84,9 @@ class Betting extends Component {
             stats[currPlayer].winnings += currAmount;
             //number complete
             stats[currPlayer].numberComplete += 1;
+        })
+        bet.players.forEach(function(player) {
+          stats[player].totalBet += bet.amount;
         })
       } else {
         //exposure
@@ -112,6 +138,7 @@ class Betting extends Component {
         <NewGroupBet/>
         <GroupBets/>
         <Statistics/>
+        <Historical/>
       </div>
     );
   }

@@ -1,9 +1,14 @@
-.new-bet-form-container {
+@font-face {
+  font-family: Quacker;
+  src: url("./fonts/Quacker.ttf") format('truetype');;
+}
 
+.new-bet-form-container {
+  padding-top:140px;
 }
 
 .new-bet-dropdown {
-  padding-left:15px;
+  padding-left:30px;
 }
 
 .new-bet-form {
@@ -12,5 +17,16 @@
 
 .personal-bets-title {
   text-align: center;
-  font-size: x-large;
+  font-size: 65px;
+  padding-bottom:5px;
+  font-family: Quacker;
+}
+
+.exchange-rates-container {
+  float:right;
+  padding-right: 30px;
+}
+
+.exchange-rate-label {
+  padding-right:20px;
 }

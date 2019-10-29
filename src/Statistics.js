@@ -14,30 +14,35 @@ class Statistics extends Component {
 
     const columns = [{
       Header: 'Player',
-      accessor: 'name',
-      Cell: this.renderEditable
+      accessor: 'name'
     },{
       Header: 'Winnings',
       accessor: 'winnings',
-      Cell: this.renderEditableNumber
+      defaultSortDesc: true
     },{
-      Header: 'Exposure',
+      Header: 'Current Exposure',
       accessor: 'exposure',
-      Cell: this.renderEditableNumber
+      defaultSortDesc: true
+    },{
+      Header: 'Total Bet',
+      accessor: 'totalBet',
+      defaultSortDesc: true
     },{
       Header: '# Complete',
       accessor: 'numberComplete',
-      Cell: this.renderEditable
+      defaultSortDesc: true
     },{
       Header: '# Pending',
       accessor: 'numberOngoing',
-      Cell: this.renderEditable
+      defaultSortDesc: true
     },{
       Header: 'Challenges',
       accessor: 'challenges',
+      defaultSortDesc: true
     },{
       Header: 'Acceptances',
       accessor: 'acceptances',
+      defaultSortDesc: true
     }]
 
     let renderStats = Object.values(this.props.stats);

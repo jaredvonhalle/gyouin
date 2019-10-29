@@ -3,6 +3,7 @@ import { Form, Button, Row, Col, Dropdown } from 'react-bootstrap';
 import './NewBet.css';
 import { getPostDataRequest } from './ApiRequests';
 import { connect } from 'react-redux';
+import {validatePersonalBet} from './BetUtils';
 
 class NewBet extends Component {
 
@@ -29,15 +30,22 @@ class NewBet extends Component {
     var stringDate = date.toISOString(); 
     var formattedDate = stringDate.substring(0, stringDate.indexOf('T'))
     newBetObj.createDate = formattedDate;
-    let jsonData = JSON.stringify(newBetObj);
 
-    let postRequest = getPostDataRequest(jsonData);
-    postRequest().then(response => {
-      console.log(response);
-      if (response.ok) {
-        this.props.dispatch({type:'ADD_BET', bet:newBetObj})
-      } 
-    })
+    let checkObj = validatePersonalBet(newBetObj)
+    if(checkObj.isValid) {
+      let jsonData = JSON.stringify(newBetObj);
+      let postRequest = getPostDataRequest(jsonData);
+      postRequest().then(response => {
+        console.log(response);
+        if (response.ok) {
+          this.props.dispatch({type:'ADD_BET', bet:newBetObj})
+        } 
+      })
+    } else {
+      alert(checkObj.msg);
+    }
+
+
 
     
   }
@@ -64,8 +72,12 @@ class NewBet extends Component {
           <Dropdown.Toggle variant="secondary" id="dropdown-basic">
             Add New Personal Bet
           </Dropdown.Toggle>
-            <Dropdown.Menu ref={this.formRef}>
-              <Form className="new-bet-form" onSubmit={this.handleSubmit}>
+          <span className="exchange-rates-container">
+            <span className="exchange-rate-label">AUD -> USD</span>
+            <span className="exchange-rate-value">{this.props.rate}</span>
+          </span>
+          <Dropdown.Menu ref={this.formRef}>
+            <Form className="new-bet-form" onSubmit={this.handleSubmit}>
               <Row>
                 <Col>
                   <Form.Group controlId="newBetChallenger">
@@ -74,7 +86,7 @@ class NewBet extends Component {
                       <option>Andrew</option>
                       <option>Ben</option>
                       <option>Jared</option>
-                      <option>Mark</option>
+                      <option>Marc</option>
                       <option>Matt</option>
                       <option>Max</option>
                       <option>Zach</option>
@@ -94,7 +106,7 @@ class NewBet extends Component {
                       <option>Andrew</option>
                       <option>Ben</option>
                       <option>Jared</option>
-                      <option>Mark</option>
+                      <option>Marc</option>
                       <option>Matt</option>
                       <option>Max</option>
                       <option>Zach</option>
@@ -138,7 +150,8 @@ class NewBet extends Component {
 
 function mapStateToProps(state) {
   return {
-    bets: state.bets
+    bets: state.bets,
+    rate: state.rate
   };
 }
 

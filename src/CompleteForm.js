@@ -3,6 +3,7 @@ import './CompleteForm.css';
 import { connect } from 'react-redux';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import {getPutDataRequest} from './ApiRequests';
+//import Sound from 'react-sound';
 
 class CompleteForm extends Component {
 
@@ -102,7 +103,6 @@ class CompleteForm extends Component {
               </Button>
             </Col>
           </Row>
-
         </Form>
       </div>
     );

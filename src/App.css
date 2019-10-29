@@ -1,5 +1,16 @@
+@font-face {
+  font-family: Showtime;
+  src: url("./fonts/Showtime.ttf") format('truetype');;
+}
+
+@font-face {
+  font-family: Main;
+  src: url("./fonts/RobotoCondensed-Regular.ttf") format('truetype');;
+}
+
+
 .App {
-  
+  font-family:Main;
 }
 
 .App-header {
@@ -9,8 +20,11 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 8vmin);
-  font-family: monospace;
+  font-size: calc(10px + 12vmin);
+  padding-top:40px;
+  font-family: Showtime;
+  color:#FBFBFB;
+  background-color:#1A1A1D;
 }
 
 .App-insurance {

@@ -3,15 +3,16 @@
   src: url("./fonts/Quacker.ttf") format('truetype');;
 }
 
-.stats-container{
+.historical-container {
   padding-top: 140px;
-  padding-left: 30px;
-  padding-right: 30px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 30px;
 }
 
-.stats-title {
+.historical-winnings-title {
+  font-size:65px;
   text-align: center;
-  font-size: 65px;
-  padding-bottom: 20px;
   font-family: Quacker;
+  padding-bottom:20px;
 }
