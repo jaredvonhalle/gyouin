@@ -85,9 +85,14 @@ class Betting extends Component {
             //number complete
             stats[currPlayer].numberComplete += 1;
         })
-        bet.players.forEach(function(player) {
-          stats[player].totalBet += bet.amount;
-        })
+        if(bet.type == "PERSONAL") {
+          stats[bet.challenger].totalBet += bet.amount;
+          stats[bet.accepter].totalBet += bet.amount;
+        } else {
+          bet.players.forEach(function(player) {
+            stats[player].totalBet += bet.amount;
+          })
+        }
       } else {
         //exposure
         if (bet.type == "PERSONAL") {
