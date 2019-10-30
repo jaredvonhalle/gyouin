@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 import {LineChart, Line, XAxis, YAxis, CartesianGrid, ReferenceLine, Tooltip, Legend, ResponsiveContainer} from 'recharts';
 
 const testData = [{
-	"date" : "Jan 2019",
+  "timePeriod" : "Jan 2019",
+  "type":"winnings",
 	"Andrew": 50,
   "Ben": 10,
   "Jared": -19,
@@ -13,7 +14,8 @@ const testData = [{
   "Max":-3,
   "Zach":7
 }, {
-	"date": "Feb 2019",
+	"timePeriod": "Feb 2019",
+  "type":"winnings",
 	"Andrew": 60,
   "Ben": -20,
   "Jared": 20.5,
@@ -22,7 +24,8 @@ const testData = [{
   "Max":-8,
   "Zach":70
 }, {
-	"date": "Mar 2019",
+	"timePeriod": "Mar 2019",
+  "type":"winnings",
 	"Andrew": 90,
   "Ben": -29,
   "Jared": 20.5,
@@ -31,7 +34,8 @@ const testData = [{
   "Max":-23,
   "Zach":70
 }, {
-	"date": "Apr 2019",
+	"timePeriod": "Apr 2019",
+  "type":"winnings",
 	"Andrew": 100,
   "Ben": -10,
   "Jared": -4,
@@ -40,7 +44,8 @@ const testData = [{
   "Max":-19,
   "Zach":77
 }, {
-	"date": "May 2019",
+	"timePeriod": "May 2019",
+  "type":"winnings",
 	"Andrew": 10,
   "Ben": -19,
   "Jared": 30,
@@ -54,6 +59,24 @@ class Historical extends Component {
 
   constructor(props) {
     super(props);
+    this.setHistoricalStats = this.setHistoricalStats.bind(this);
+  }
+
+  componentWillMount() {
+    this.setHistoricalStats()
+  }
+
+  setHistoricalStats() {
+    const url = '/api/BetsStats';
+    fetch(
+      url
+    )
+    .then(response => {
+      return response.json();
+    })
+    .then(data => {
+      this.props.dispatch({type:'SET_HISTORICAL_STATS', stats:data})
+    })
   }
 
 	render() {
@@ -61,7 +84,7 @@ class Historical extends Component {
     
     return (
       <div className="historical-container">
-        <div className="historical-winnings-title">Historical Winnings</div>
+        <div className="historical-winnings-title">Historical Winnings (mock data)</div>
         <ResponsiveContainer width="100%" height={500}>
           <LineChart
             width={500}
@@ -72,7 +95,7 @@ class Historical extends Component {
             }}
           >
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="date" />
+            <XAxis dataKey="timePeriod" />
             <YAxis />
             <ReferenceLine y={0} stroke="black" strokeDasharray="5 5" />
             <Tooltip />
@@ -86,6 +109,34 @@ class Historical extends Component {
             <Line type="linear" dataKey="Zach" stroke="#0000FF" />
           </LineChart>
         </ResponsiveContainer>
+
+        <div className="historical-separator"></div>
+
+        <div className="historical-winnings-title">Historical Winnings</div>
+        <ResponsiveContainer width="100%" height={500}>
+          <LineChart
+            width={500}
+            height={300}
+            data={this.props.historicalStats}
+            margin={{
+              top: 5, right: 30, left: 20, bottom: 5,
+            }}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="timePeriod" />
+            <YAxis />
+            <ReferenceLine y={0} stroke="black" strokeDasharray="5 5" />
+            <Tooltip />
+            <Legend />
+            <Line type="linear" dataKey="andrew" stroke="#E74C3C" />
+            <Line type="linear" dataKey="ben" stroke="#8E44AD" />
+            <Line type="linear" dataKey="jared" stroke="#E67E22" />
+            <Line type="linear" dataKey="marc" stroke="#008000" />
+            <Line type="linear" dataKey="matt" stroke="#FF00FF" />
+            <Line type="linear" dataKey="max" stroke="#808080" />
+            <Line type="linear" dataKey="zach" stroke="#0000FF" />
+          </LineChart>
+        </ResponsiveContainer>
         
       </div>
     );
@@ -95,8 +146,7 @@ class Historical extends Component {
 
 function mapStateToProps(state) {
   return {
-    bets: state.bets,
-    stats: state.stats
+    historicalStats: state.historicalStats
   };
 }
 

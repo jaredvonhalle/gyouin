@@ -14,6 +14,7 @@ class GroupBets extends Component {
     super(props);
     this.renderEditable = this.renderEditable.bind(this);
     this.renderEditableNumber = this.renderEditableNumber.bind(this);
+    this.renderEditableLink = this.renderEditableLink.bind(this);
     this.saveRow = this.saveRow.bind(this);
     this.deleteRow = this.deleteRow.bind(this);
     this.completeRow = this.completeRow.bind(this);
@@ -112,6 +113,29 @@ class GroupBets extends Component {
     );
   }
 
+  renderEditableLink(cellInfo) {
+    return (
+      <a href={cellInfo.value}
+        contentEditable
+        suppressContentEditableWarning
+        onBlur={e => {
+          var changedInd = (this.props.bets[cellInfo.original.id][cellInfo.column.id] == e.target.innerHTML) ? false : true
+          if (changedInd) {
+            let currBet = JSON.parse(JSON.stringify(this.props.bets[cellInfo.original.id]));
+            currBet[cellInfo.column.id] = e.target.innerHTML;
+            if(!currBet.isComplete) {
+              this.props.dispatch({type:'SAVE_BET', bet:currBet});
+              this.props.dispatch({type:'SET_BET_SAVE_IND_TRUE', id:cellInfo.original.id})
+            }
+          }
+        }}
+        dangerouslySetInnerHTML={{
+          __html: this.props.bets[cellInfo.original.id][cellInfo.column.id]
+        }}
+      />
+    );
+  }
+
 	render() {
 
     const columns = [{
@@ -156,6 +180,10 @@ class GroupBets extends Component {
           />
         )
       }
+    },{
+      Header: 'Link',
+      accessor: 'link',
+      Cell: this.renderEditableLink
     },{
       Header: 'Save',
       Cell: props => {
@@ -227,6 +255,7 @@ class GroupBets extends Component {
           columns={columns}
           defaultPageSize = {5}
           filterable
+          multiSort={true}
           defaultSorted={[
             {
               id: "endDate"

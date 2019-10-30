@@ -12,7 +12,8 @@ const initialState = {
   currCompleteBet:{},
   currGroupCompleteBet:{},
   stats:{},
-  rate:""
+  rate:"",
+  historicalStats:[]
 };
 
 function reducer(state = initialState, action) {
@@ -28,6 +29,10 @@ function reducer(state = initialState, action) {
       return produce(state, draft => {
         draft.bets= betsJson;
       });
+    case 'SET_HISTORICAL_STATS':
+      return produce(state, draft => {
+        draft.historicalStats = action.stats;
+      })
     case 'SHOW_COMPLETE_FORM':
       return produce(state, draft => {
         draft.showCompleteForm=true;

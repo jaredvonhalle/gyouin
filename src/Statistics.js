@@ -56,6 +56,7 @@ class Statistics extends Component {
           columns={columns}
           defaultPageSize = {7}
           showPagination={false}
+          multiSort={true}
           defaultSorted={[
             {
               id: "winnings",

@@ -22,7 +22,7 @@ class NewBet extends Component {
     newBetObj.amount = parseFloat(amount);
     newBetObj.description = description;
     newBetObj.endDate = endDate;
-    newBetObj.resultString = "Pending";
+    newBetObj.resultString = "";
     newBetObj.type = "PERSONAL";
     newBetObj.result = [];
     var date = new Date();

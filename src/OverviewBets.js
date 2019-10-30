@@ -242,6 +242,7 @@ class OverviewBets extends Component {
           columns={columns}
           defaultPageSize = {10}
           filterable
+          multiSort={true}
           defaultSorted={[
             {
               id: "endDate"

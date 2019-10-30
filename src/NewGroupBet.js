@@ -13,7 +13,7 @@ class NewGroupBet extends Component {
     this.formRef = React.createRef();
   }
 
-  buildNewBet(players, amount, description, endDate) {
+  buildNewBet(players, amount, description, endDate, link) {
     let newBetObj = {};
     newBetObj.id = (Math.random() * 100000000000000000000).toString() + Date.now().toString();
     newBetObj.players = players;
@@ -27,7 +27,8 @@ class NewGroupBet extends Component {
     newBetObj.amount = parseFloat(amount);
     newBetObj.description = description;
     newBetObj.endDate = endDate;
-    newBetObj.resultString = "Pending";
+    newBetObj.link = link;
+    newBetObj.resultString = "";
     newBetObj.type = "GROUP";
     newBetObj.result = [];
     var date = new Date();
@@ -64,7 +65,8 @@ class NewGroupBet extends Component {
       players,
       event.target.elements.newBetAmount.value,
       event.target.elements.newBetDescription.value,
-      event.target.elements.newBetEndDate.value
+      event.target.elements.newBetEndDate.value,
+      event.target.elements.newBetLink.value
     );
     var form = this.formRef.current;
     form.handleClose();
@@ -134,6 +136,14 @@ class NewGroupBet extends Component {
                   <Form.Group controlId="newBetDescription">
                     <Form.Label>Description</Form.Label>
                     <Form.Control type="text" placeholder="Enter Description" />
+                  </Form.Group>
+                </Col>
+              </Row>
+              <Row>
+                <Col>
+                  <Form.Group controlId="newBetLink">
+                    <Form.Label>Link (optional, include http:// or https://)</Form.Label>
+                    <Form.Control type="text" placeholder="Paste Link" />
                   </Form.Group>
                 </Col>
               </Row>
