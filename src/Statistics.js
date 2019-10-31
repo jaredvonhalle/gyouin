@@ -1,13 +1,21 @@
 import React, { Component } from 'react';
+import {Button} from 'react-bootstrap';
 import './Statistics.css';
 import ReactTable from "react-table";
 import "react-table/react-table.css";
 import { connect } from 'react-redux';
+import {getUpdatedStats} from './BetUtils';
 
 class Statistics extends Component {
 
   constructor(props) {
     super(props);
+    this.setStats = this.setStats.bind(this);
+  }
+
+  setStats() {
+    let stats = getUpdatedStats(this.props.bets);
+    this.props.dispatch({type:'SET_STATISTICS', stats:stats})
   }
 
 	render() {
@@ -50,6 +58,11 @@ class Statistics extends Component {
     return (
       <div className="stats-container">
         <div className="stats-title">Statistics</div>
+        <Button variant="link"
+          onClick={() => this.setStats()}
+          className="stats-refresh">
+          Refresh
+        </Button>
         <ReactTable
           className="-striped"
           data={renderStats}

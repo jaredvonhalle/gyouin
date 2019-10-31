@@ -13,13 +13,17 @@ class NewBet extends Component {
     this.formRef = React.createRef();
   }
 
-  buildNewBet(accepter, challenger, odds, amount, description, endDate) {
+  buildNewBet(accepter, challenger, odds, amount, description, endDate, currency) {
     let newBetObj = {};
     newBetObj.id = (Math.random() * 100000000000000000000).toString() + Date.now().toString();
     newBetObj.accepter = accepter;
     newBetObj.challenger = challenger;
     newBetObj.odds = odds;
-    newBetObj.amount = parseFloat(amount);
+    if (currency === "AUD") {
+      newBetObj.amount = Math.round((parseFloat(amount) * parseFloat(this.props.rate))*100) / 100;
+    } else {
+      newBetObj.amount = parseFloat(amount);
+    }
     newBetObj.description = description;
     newBetObj.endDate = endDate;
     newBetObj.resultString = "";
@@ -42,11 +46,7 @@ class NewBet extends Component {
       })
     } else {
       alert(checkObj.msg);
-    }
-
-
-
-    
+    }  
   }
 
   handleSubmit = event => {
@@ -57,7 +57,8 @@ class NewBet extends Component {
       event.target.elements.newBetOdds.value,
       event.target.elements.newBetAmount.value,
       event.target.elements.newBetDescription.value,
-      event.target.elements.newBetEndDate.value
+      event.target.elements.newBetEndDate.value,
+      event.target.elements.newBetCurrency.value
     );
     var form = this.formRef.current;
     form.handleClose();
@@ -126,6 +127,15 @@ class NewBet extends Component {
                   <Form.Group controlId="newBetAmount">
                     <Form.Label>Amount</Form.Label>
                     <Form.Control type="number" placeholder="0.00"/>
+                  </Form.Group>
+                </Col>
+                <Col>
+                  <Form.Group controlId="newBetCurrency">
+                    <Form.Label>Currency</Form.Label>
+                    <Form.Control as="select">
+                      <option>USD</option>
+                      <option>AUD</option>
+                    </Form.Control>
                   </Form.Group>
                 </Col>
                 <Col>

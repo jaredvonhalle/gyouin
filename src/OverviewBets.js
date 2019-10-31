@@ -16,6 +16,7 @@ class OverviewBets extends Component {
     this.saveRow = this.saveRow.bind(this);
     this.deleteRow = this.deleteRow.bind(this);
     this.completeRow = this.completeRow.bind(this);
+    this.filterIn = this.filterIn.bind(this);
   }
 
   componentDidMount() {
@@ -79,6 +80,11 @@ class OverviewBets extends Component {
     this.props.dispatch({type:'SHOW_COMPLETE_FORM', completeBet:data})
   }
 
+  filterIn(filter, row, column) {
+    const id = filter.pivotId || filter.id
+    return row[id] !== undefined ? String(row[id]).includes(filter.value) : true
+  }
+
   renderEditableNumber(cellInfo) {
     return (
       <div
@@ -140,7 +146,8 @@ class OverviewBets extends Component {
     },{
       Header: 'Description',
       accessor: 'description',
-      Cell: this.renderEditable
+      Cell: this.renderEditable,
+      filterMethod: this.filterIn
     },{
       Header: 'Accepter',
       accessor: 'accepter',
@@ -170,7 +177,8 @@ class OverviewBets extends Component {
             }}
           />
         )
-      }
+      },
+      filterMethod: this.filterIn
     },{
       Header: 'Save',
       Cell: props => {
