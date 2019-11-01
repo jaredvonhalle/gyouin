@@ -4,7 +4,8 @@ import Betting from './Betting';
 import insurance from './insurance.svg'
 import { Provider } from 'react-redux';
 import { createStore, bindActionCreators } from 'redux';
-import produce from "immer"
+import produce from "immer";
+import Sound from 'react-sound';
 
 const initialState = {
   bets:{},
@@ -13,7 +14,8 @@ const initialState = {
   currGroupCompleteBet:{},
   stats:{},
   rate:"",
-  historicalStats:[]
+  historicalStats:[],
+  MattWinSoundStatus:Sound.status.STOPPED
 };
 
 function reducer(state = initialState, action) {
@@ -81,6 +83,14 @@ function reducer(state = initialState, action) {
     case 'SET_RATE':
       return produce(state, draft => {
         draft.rate = action.rate;
+      })
+    case 'SET_MATT_WIN_SOUND_PLAYING':
+      return produce(state, draft => {
+        draft.MattWinSoundStatus = Sound.status.PLAYING;
+      })
+    case 'SET_MATT_WIN_SOUND_STOPPED':
+      return produce(state, draft => {
+        draft.MattWinSoundStatus = Sound.status.STOPPED;
       })
     default:
       return state;

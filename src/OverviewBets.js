@@ -19,21 +19,6 @@ class OverviewBets extends Component {
     this.filterIn = this.filterIn.bind(this);
   }
 
-  componentDidMount() {
-    const url = '/api/Bets';
-
-    fetch(
-      url
-    )
-    .then(response => {
-      return response.json();
-    })
-    .then(data => {
-      this.props.dispatch({type:'GET_BETS', bets:data})
-    })
-    
-  }
-
   saveBet(data) {
     let checkObj = validatePersonalBet(data)
     if(checkObj.isValid) {

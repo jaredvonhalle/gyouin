@@ -1,5 +1,5 @@
 export function getPutDataRequest(data) {
-  const url = '/api/Bets/' + data.id;
+  const url = process.env.REACT_APP_API_DOMAIN + '/api/Bets/' + data.id;
   let jsonData = JSON.stringify(data)
   let fetchData = { 
       method: 'PUT', 
@@ -13,7 +13,7 @@ export function getPutDataRequest(data) {
 }
 
 export function getDeleteDataRequest(data) {
-  const url = '/api/Bets/' + data.id;
+  const url = process.env.REACT_APP_API_DOMAIN + '/api/Bets/' + data.id;
   let fetchData = { 
       method: 'DELETE', 
       headers: {
@@ -25,7 +25,7 @@ export function getDeleteDataRequest(data) {
 }
 
 export function getPostDataRequest(jsonData) {
-  const url = '/api/Bets/'
+  const url = process.env.REACT_APP_API_DOMAIN + '/api/Bets/'
   let fetchData = { 
       method: 'POST', 
       body: jsonData,

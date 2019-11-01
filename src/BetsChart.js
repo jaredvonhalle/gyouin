@@ -18,7 +18,7 @@ class BetsChart extends Component {
   }
 
   componentDidMount() {
-    const url = '/api/Bets';
+    const url = process.env.REACT_APP_API_DOMAIN + '/api/Bets';
 
     fetch(
       url

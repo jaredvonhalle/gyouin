@@ -8,6 +8,9 @@ import Historical from './Historical';
 import { connect } from 'react-redux';
 import {getUpdatedStats} from './BetUtils';
 import './Betting.css';
+import Sound from 'react-sound';
+
+const soundUrl=process.env.REACT_APP_API_DOMAIN + "/t.mp3"
 
 class Betting extends Component {
 
@@ -16,6 +19,7 @@ class Betting extends Component {
     this.setBets = this.setBets.bind(this);
     this.setStats = this.setStats.bind(this);
     this.setExchangeRates = this.setExchangeRates.bind(this);
+    this.handleFinishedPlaying = this.handleFinishedPlaying.bind(this);
   }
 
   componentWillMount() {
@@ -41,7 +45,8 @@ class Betting extends Component {
   }
 
   setBets() {
-    const url = '/api/Bets';
+    console.log(process.env.REACT_APP_API_DOMAIN);
+    const url = process.env.REACT_APP_API_DOMAIN + '/api/Bets';
     fetch(
       url
     )
@@ -52,6 +57,10 @@ class Betting extends Component {
       this.props.dispatch({type:'GET_BETS', bets:data})
       this.setStats();
     })
+  }
+
+  handleFinishedPlaying() {
+    this.props.dispatch({type:'SET_MATT_WIN_SOUND_STOPPED'})
   }
 
   setStats() {
@@ -68,6 +77,11 @@ class Betting extends Component {
         <GroupBets/>
         <Statistics/>
         <Historical/>
+        <Sound
+          url={soundUrl}
+          playStatus={this.props.MattWinSoundStatus}
+          onFinishedPlaying={this.handleFinishedPlaying}
+        />
       </div>
     );
   }
@@ -76,7 +90,8 @@ class Betting extends Component {
 function mapStateToProps(state) {
   return {
     stats:state.stats,
-    bets: state.bets
+    bets: state.bets,
+    MattWinSoundStatus: state.MattWinSoundStatus
   };
 }
 

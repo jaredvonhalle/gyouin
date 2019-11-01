@@ -15,7 +15,8 @@ class CompleteGroupForm extends Component {
   handleSubmit = event => {
     event.preventDefault();
 
-    let results = []
+    let results = [];
+    let mattWon = false;
 
     event.target.elements.player.forEach(function(item, index) {
       results.push({
@@ -27,6 +28,9 @@ class CompleteGroupForm extends Component {
     let resultString = "";
     results.forEach(function(result) {
       resultString += result.player + "  " + result.amount + "\r\n";
+      if(result.player === "Matt" && result.amount > 0) {
+        mattWon = true;
+      }
     })
 
     let currBet = JSON.parse(JSON.stringify(this.props.currGroupCompleteBet))
@@ -36,6 +40,9 @@ class CompleteGroupForm extends Component {
     currBet.isComplete = true;
 
     this.saveBet(currBet);
+    if(mattWon) {
+      this.props.dispatch({type:'SET_MATT_WIN_SOUND_PLAYING'})
+    }
     this.props.dispatch({type:'HIDE_GROUP_COMPLETE_FORM'})
   };
 

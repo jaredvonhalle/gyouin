@@ -67,7 +67,7 @@ class Historical extends Component {
   }
 
   setHistoricalStats() {
-    const url = '/api/BetsStats';
+    const url = process.env.REACT_APP_API_DOMAIN + '/api/BetsStats';
     fetch(
       url
     )

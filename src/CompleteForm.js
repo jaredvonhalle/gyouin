@@ -3,9 +3,10 @@ import './CompleteForm.css';
 import { connect } from 'react-redux';
 import { Form, Button, Row, Col } from 'react-bootstrap';
 import {getPutDataRequest} from './ApiRequests';
-//import Sound from 'react-sound';
 
 class CompleteForm extends Component {
+
+  
 
   constructor(props) {
     super(props);
@@ -15,6 +16,8 @@ class CompleteForm extends Component {
 
   handleSubmit = event => {
     event.preventDefault();
+
+    let mattWon = false;
 
     let results = [
       {
@@ -30,6 +33,9 @@ class CompleteForm extends Component {
     let resultString = "";
     results.forEach(function(result) {
       resultString += "<div>" + result.player + "  " + result.amount + "</div>";
+      if(result.player === "Matt" && result.amount > 0) {
+        mattWon = true;
+      }
     })
 
     let currBet = JSON.parse(JSON.stringify(this.props.currCompleteBet))
@@ -39,6 +45,9 @@ class CompleteForm extends Component {
     currBet.isComplete = true;
 
     this.saveBet(currBet);
+    if(mattWon) {
+      this.props.dispatch({type:'SET_MATT_WIN_SOUND_PLAYING'})
+    }
     this.props.dispatch({type:'HIDE_COMPLETE_FORM'})
   };
 
@@ -62,48 +71,50 @@ class CompleteForm extends Component {
 
 	render() {
     return (
-      <div className="complete-form">
-        <Form className="new-bet-form" onSubmit={this.handleSubmit} onReset={this.handleCancel}>
-          <div className="complete-form-title">Complete Form</div>
-          <div className="complete-form-bet">{this.props.currCompleteBet.description}</div>
-          <div className="complete-form-note">*Note, use negative numbers for losses*</div>
-          <Row>
-            <Col>
-              <Form.Label>Challenger</Form.Label>
-              <Form.Control className="complete-bet-form-plaintext" plaintext readOnly defaultValue={this.props.currCompleteBet.challenger} />
-            </Col>
-            <Col>
-              <Form.Group controlId="completeBetChallengerAmount">
-                <Form.Label>Amount</Form.Label>
-                <Form.Control type="number" placeholder="0.00"/>
-              </Form.Group>
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-            <Form.Label>Accepter</Form.Label>
-              <Form.Control className="complete-bet-form-plaintext" plaintext readOnly defaultValue={this.props.currCompleteBet.accepter} />
-            </Col>
-            <Col>
-              <Form.Group controlId="completeBetAccepterAmount">
-                <Form.Label>Amount</Form.Label>
-                <Form.Control type="number" placeholder="0.00"/>
-              </Form.Group>
-            </Col>
-          </Row>
-          <Row>
-            <Col>
-              <Button variant="success" type="submit">
-                Submit
-              </Button>
-            </Col>
-            <Col>
-              <Button variant="danger" type="reset">
-                Cancel
-              </Button>
-            </Col>
-          </Row>
-        </Form>
+      <div className="complete-container">
+        <div className="complete-form">
+          <Form className="new-bet-form" onSubmit={this.handleSubmit} onReset={this.handleCancel}>
+            <div className="complete-form-title">Complete Form</div>
+            <div className="complete-form-bet">{this.props.currCompleteBet.description}</div>
+            <div className="complete-form-note">*Note, use negative numbers for losses*</div>
+            <Row>
+              <Col>
+                <Form.Label>Challenger</Form.Label>
+                <Form.Control className="complete-bet-form-plaintext" plaintext readOnly defaultValue={this.props.currCompleteBet.challenger} />
+              </Col>
+              <Col>
+                <Form.Group controlId="completeBetChallengerAmount">
+                  <Form.Label>Amount</Form.Label>
+                  <Form.Control type="number" placeholder="0.00"/>
+                </Form.Group>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+              <Form.Label>Accepter</Form.Label>
+                <Form.Control className="complete-bet-form-plaintext" plaintext readOnly defaultValue={this.props.currCompleteBet.accepter} />
+              </Col>
+              <Col>
+                <Form.Group controlId="completeBetAccepterAmount">
+                  <Form.Label>Amount</Form.Label>
+                  <Form.Control type="number" placeholder="0.00"/>
+                </Form.Group>
+              </Col>
+            </Row>
+            <Row>
+              <Col>
+                <Button variant="success" type="submit">
+                  Submit
+                </Button>
+              </Col>
+              <Col>
+                <Button variant="danger" type="reset">
+                  Cancel
+                </Button>
+              </Col>
+            </Row>
+          </Form>
+        </div>
       </div>
     );
   }
