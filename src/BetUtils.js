@@ -181,12 +181,12 @@ export function getUpdatedStats(bets) {
         
         if (giving > getting) {
           let oddsRatio = parseFloat(giving)/parseFloat(getting);
-          stats[bet.accepter].exposure += (bet.amount * oddsRatio);
-          stats[bet.challenger].exposure += bet.amount;
-        } else if (getting > giving) {
-          let oddsRatio = parseFloat(getting)/parseFloat(giving);
           stats[bet.challenger].exposure += (bet.amount * oddsRatio);
           stats[bet.accepter].exposure += bet.amount;
+        } else if (getting > giving) {
+          let oddsRatio = parseFloat(getting)/parseFloat(giving);
+          stats[bet.accepter].exposure += (bet.amount * oddsRatio);
+          stats[bet.challenger].exposure += bet.amount;
         } else {
           stats[bet.challenger].exposure += bet.amount;
           stats[bet.accepter].exposure += bet.amount;
