@@ -64,7 +64,7 @@ class Statistics extends Component {
           Refresh
         </Button>
         <ReactTable
-          className="-striped"
+          className="-striped stats-table"
           data={renderStats}
           columns={columns}
           defaultPageSize = {7}

@@ -85,7 +85,7 @@ class CompleteForm extends Component {
               <Col>
                 <Form.Group controlId="completeBetChallengerAmount">
                   <Form.Label>Amount</Form.Label>
-                  <Form.Control type="number" placeholder="0.00"/>
+                  <Form.Control type="number" step="any" placeholder="0.00"/>
                 </Form.Group>
               </Col>
             </Row>
@@ -97,7 +97,7 @@ class CompleteForm extends Component {
               <Col>
                 <Form.Group controlId="completeBetAccepterAmount">
                   <Form.Label>Amount</Form.Label>
-                  <Form.Control type="number" placeholder="0.00"/>
+                  <Form.Control type="number" step="any" placeholder="0.00"/>
                 </Form.Group>
               </Col>
             </Row>

@@ -84,34 +84,6 @@ class Historical extends Component {
     
     return (
       <div className="historical-container">
-        <div className="historical-winnings-title">Historical Winnings (mock data)</div>
-        <ResponsiveContainer width="100%" height={500}>
-          <LineChart
-            width={500}
-            height={300}
-            data={testData}
-            margin={{
-              top: 5, right: 30, left: 20, bottom: 5,
-            }}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="timePeriod" />
-            <YAxis />
-            <ReferenceLine y={0} stroke="black" strokeDasharray="5 5" />
-            <Tooltip />
-            <Legend />
-            <Line type="linear" dataKey="Andrew" stroke="#E74C3C" />
-            <Line type="linear" dataKey="Ben" stroke="#8E44AD" />
-            <Line type="linear" dataKey="Jared" stroke="#E67E22" />
-            <Line type="linear" dataKey="Marc" stroke="#008000" />
-            <Line type="linear" dataKey="Matt" stroke="#FF00FF" />
-            <Line type="linear" dataKey="Max" stroke="#808080" />
-            <Line type="linear" dataKey="Zach" stroke="#0000FF" />
-          </LineChart>
-        </ResponsiveContainer>
-
-        <div className="historical-separator"></div>
-
         <div className="historical-winnings-title">Historical Winnings</div>
         <ResponsiveContainer width="100%" height={500}>
           <LineChart

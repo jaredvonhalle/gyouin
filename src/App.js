@@ -33,7 +33,7 @@ function reducer(state = initialState, action) {
       });
     case 'SET_HISTORICAL_STATS':
       return produce(state, draft => {
-        draft.historicalStats = action.stats;
+        draft.historicalStats = action.stats.reverse();
       })
     case 'SHOW_COMPLETE_FORM':
       return produce(state, draft => {

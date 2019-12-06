@@ -210,6 +210,10 @@ export function getUpdatedStats(bets) {
     }
   })
 
+  a.players.forEach(function(player) {
+    stats[player].winnings = Math.round(stats[player].winnings * 100) / 100;
+  })
+
   return stats;
   //this.props.dispatch({type:'SET_STATISTICS', stats:stats})
 

@@ -267,6 +267,9 @@ class GroupBets extends Component {
           multiSort={true}
           defaultSorted={[
             {
+              id: "resultString"
+            },
+            {
               id: "endDate"
             }
           ]}

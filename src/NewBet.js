@@ -72,10 +72,10 @@ class NewBet extends Component {
           <Dropdown.Toggle variant="secondary" id="dropdown-basic">
             Add New Personal Bet
           </Dropdown.Toggle>
-          <span className="exchange-rates-container">
+          <div className="exchange-rates-container">
             <span className="exchange-rate-label">AUD -> USD</span>
             <span className="exchange-rate-value">{this.props.rate}</span>
-          </span>
+          </div>
           <Dropdown.Menu ref={this.formRef}>
             <Form className="new-bet-form" onSubmit={this.handleSubmit}>
               <Row>
